@@ -6,7 +6,7 @@
 
 ## 1. Purpose
 
-A modular Python pipeline that finds Denver-area jobs matching the user's resume, scores them for fit, identifies relevant contacts at high-scoring companies, generates personalized LinkedIn outreach messages, persists all results to PostgreSQL, and renders output via an A2UI interface. Runs on-demand via CLI or on a schedule.
+A modular Python pipeline driven by user input — provided via the command line (and later through the A2UI interface) — that finds jobs matching the user's resume, scores them for fit, identifies relevant contacts at high-scoring companies, generates personalized LinkedIn outreach messages, persists all results to PostgreSQL, and renders output via A2UI. Runs on-demand via CLI or on a schedule.
 
 ---
 
