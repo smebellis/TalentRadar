@@ -1,0 +1,7 @@
+defaults:
+  - api_keys
+  - database
+  - logging
+  - scoring
+  - search
+  - _self_
