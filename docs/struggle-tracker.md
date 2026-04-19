@@ -34,4 +34,15 @@ Updated after every passing test and every completed module. Struggled concepts 
 
 ---
 
+## 2026-04-19 — Module: Pydantic Models (Task 4)
+
+| Concept | Status | Notes |
+|---|---|---|
+| `float \| None = None` optional field syntax | 🔴 Struggled | Took several rounds — confused `Field(default_factory=None)` with simple default |
+| `model_validator(mode="after")` | 🟡 Needed a nudge | First time using it; needed guidance on `raise ValueError` vs `return None` and setting `self.field` |
+| `Field(default_factory=uuid4)` | 🟢 Solid | Understood why factory vs static default matters |
+| `default_factory` vs `default` | 🟢 Solid | Correctly explained shared-instance risk unprompted |
+| Pydantic type validation at construction | 🟢 Solid | Understood ValidationError purpose immediately |
+| `is_veteran=(category == "veteran")` inline bool | 🟢 Solid | Read it correctly on first explanation |
+
 <!-- Add new entries below as we progress through the build -->
