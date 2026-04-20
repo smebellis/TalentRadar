@@ -81,7 +81,7 @@ This plan follows the user's preferred TDD workflow:
 - Create: all package folders with `__init__.py`
 - Create: `requirements.txt`, `.env.example`, `conftest.py`
 
-- [ ] **Step 1: Create all package directories**
+- [x] **Step 1: Create all package directories**
 
 ```bash
 mkdir -p config cv db/models db/repositories llm pipeline \
@@ -89,7 +89,7 @@ mkdir -p config cv db/models db/repositories llm pipeline \
          tests/unit tests/integration
 ```
 
-- [ ] **Step 2: Create `__init__.py` for every package**
+- [x] **Step 2: Create `__init__.py` for every package**
 
 ```bash
 touch cv/__init__.py db/__init__.py db/models/__init__.py \
@@ -101,7 +101,7 @@ touch cv/__init__.py db/__init__.py db/models/__init__.py \
       tests/integration/__init__.py
 ```
 
-- [ ] **Step 3: Create `requirements.txt`**
+- [x] **Step 3: Create `requirements.txt`**
 
 ```
 anthropic>=0.40.0
@@ -118,7 +118,7 @@ pytest-cov>=5.0.0
 python-dotenv>=1.0.0
 ```
 
-- [ ] **Step 3b: Create `pyproject.toml` (pytest-asyncio config)**
+- [x] **Step 3b: Create `pyproject.toml` (pytest-asyncio config)**
 
 ```toml
 [tool.pytest.ini_options]
@@ -126,7 +126,7 @@ asyncio_mode = "auto"
 testpaths = ["tests"]
 ```
 
-- [ ] **Step 4: Create `.env.example`**
+- [x] **Step 4: Create `.env.example`**
 
 ```
 ANTHROPIC_API_KEY=your_anthropic_key_here
@@ -139,7 +139,7 @@ POSTGRES_USER=your_pg_user
 POSTGRES_PASSWORD=your_pg_password
 ```
 
-- [ ] **Step 5: Create `conftest.py` at project root**
+- [x] **Step 5: Create `conftest.py` at project root**
 
 ```python
 import pytest
@@ -208,7 +208,7 @@ def fake_llm():
     return mock
 ```
 
-- [ ] **Step 6: Create empty placeholder files for all source modules**
+- [x] **Step 6: Create empty placeholder files for all source modules**
 
 ```bash
 touch cv/loader.py cv/parser.py \
@@ -225,7 +225,7 @@ touch cv/loader.py cv/parser.py \
       cli.py scheduler.py
 ```
 
-- [ ] **Step 7: Create empty test files**
+- [x] **Step 7: Create empty test files**
 
 ```bash
 touch tests/unit/test_models.py tests/unit/test_state.py \
@@ -239,13 +239,13 @@ touch tests/unit/test_models.py tests/unit/test_state.py \
       tests/integration/test_pipeline.py
 ```
 
-- [ ] **Step 8: Install dependencies**
+- [x] **Step 8: Install dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-- [ ] **Step 9: Commit scaffolding**
+- [x] **Step 9: Commit scaffolding**
 
 ```bash
 git add .
@@ -259,7 +259,7 @@ git commit -m "chore: project scaffolding — packages, dependencies, conftest"
 **Files:**
 - Create: `config/config.yaml`, `config/api_keys.yaml`, `config/database.yaml`, `config/logging.yaml`, `config/scoring.yaml`, `config/search.yaml`
 
-- [ ] **Step 1: Create `config/config.yaml` (Hydra root — composes all sub-configs)**
+- [x] **Step 1: Create `config/config.yaml` (Hydra root — composes all sub-configs)**
 
 ```yaml
 defaults:
@@ -271,7 +271,7 @@ defaults:
   - _self_
 ```
 
-- [ ] **Step 2: Create `config/api_keys.yaml`**
+- [x] **Step 2: Create `config/api_keys.yaml`**
 
 ```yaml
 anthropic_api_key: ${oc.env:ANTHROPIC_API_KEY}
@@ -279,7 +279,7 @@ apify_api_token: ${oc.env:APIFY_API_TOKEN}
 vibe_api_key: ${oc.env:VIBE_API_KEY}
 ```
 
-- [ ] **Step 3: Create `config/database.yaml`**
+- [x] **Step 3: Create `config/database.yaml`**
 
 ```yaml
 host: ${oc.env:POSTGRES_HOST,localhost}
@@ -291,7 +291,7 @@ min_pool_size: 2
 max_pool_size: 10
 ```
 
-- [ ] **Step 4: Create `config/logging.yaml`**
+- [x] **Step 4: Create `config/logging.yaml`**
 
 ```yaml
 level: INFO
@@ -302,7 +302,7 @@ file:
   backup_count: 3
 ```
 
-- [ ] **Step 5: Create `config/scoring.yaml`**
+- [x] **Step 5: Create `config/scoring.yaml`**
 
 ```yaml
 job_score_threshold: 7.0
@@ -312,7 +312,7 @@ max_contacts_per_category: 8
 veteran_score_boost: 1.5
 ```
 
-- [ ] **Step 6: Create `config/search.yaml`**
+- [x] **Step 6: Create `config/search.yaml`**
 
 ```yaml
 location: "Denver, CO"
@@ -323,7 +323,7 @@ job_type: "full-time"
 time_window_hours: 24
 ```
 
-- [ ] **Step 7: Commit configs**
+- [x] **Step 7: Commit configs**
 
 ```bash
 git add config/
@@ -339,7 +339,7 @@ git commit -m "chore: add Hydra configuration files"
 
 > These tests are written BEFORE any implementation. They define the contract for each module. All tests will FAIL until the corresponding module is implemented.
 
-- [ ] **Step 1: Write `tests/unit/test_models.py`**
+- [x] **Step 1: Write `tests/unit/test_models.py`**
 
 ```python
 import pytest
@@ -491,7 +491,7 @@ def test_message_rejects_text_over_300_chars():
         )
 ```
 
-- [ ] **Step 2: Write `tests/unit/test_state.py`**
+- [] **Step 2: Write `tests/unit/test_state.py`**
 
 ```python
 import pytest
@@ -530,7 +530,7 @@ def test_pipeline_context_errors_accumulate():
     assert len(ctx.errors) == 1
 ```
 
-- [ ] **Step 3: Write `tests/unit/test_logger.py`**
+- [] **Step 3: Write `tests/unit/test_logger.py`**
 
 ```python
 import logging
@@ -553,7 +553,7 @@ def test_get_logger_different_names_return_different_loggers():
     assert logger_a is not logger_b
 ```
 
-- [ ] **Step 4: Write `tests/unit/test_llm.py`**
+- [] **Step 4: Write `tests/unit/test_llm.py`**
 
 ```python
 import pytest
@@ -601,7 +601,7 @@ def test_claude_client_passes_system_and_user_to_sdk():
         assert call_kwargs["messages"][0]["content"] == "user msg"
 ```
 
-- [ ] **Step 5: Write `tests/unit/test_cv_loader.py`**
+- [] **Step 5: Write `tests/unit/test_cv_loader.py`**
 
 ```python
 import pytest
@@ -645,7 +645,7 @@ def test_cv_loader_raises_on_missing_file():
             loader.load("missing.pdf")
 ```
 
-- [ ] **Step 6: Write `tests/unit/test_cv_parser.py`**
+- [] **Step 6: Write `tests/unit/test_cv_parser.py`**
 
 ```python
 import json
@@ -722,7 +722,7 @@ def test_cv_parser_system_prompt_contains_veteran_signals():
     assert "military" in SYSTEM_PROMPT.lower() or "MOS" in SYSTEM_PROMPT
 ```
 
-- [ ] **Step 7: Write `tests/unit/test_google_search.py`**
+- [] **Step 7: Write `tests/unit/test_google_search.py`**
 
 ```python
 import json
@@ -795,7 +795,7 @@ def test_google_searcher_passes_filters_to_llm():
     assert user_payload["location"] == "Denver, CO"
 ```
 
-- [ ] **Step 8: Write `tests/unit/test_linkedin_search.py`**
+- [] **Step 8: Write `tests/unit/test_linkedin_search.py`**
 
 ```python
 import pytest
@@ -866,7 +866,7 @@ def test_linkedin_searcher_filters_old_jobs():
     assert results == []
 ```
 
-- [ ] **Step 9: Write `tests/unit/test_combiner.py`**
+- [] **Step 9: Write `tests/unit/test_combiner.py`**
 
 ```python
 import pytest
@@ -918,7 +918,7 @@ def test_combine_jobs_preserves_unique_jobs_from_both_sources():
     assert companies == {"Acme", "BetaCo", "GammaCo"}
 ```
 
-- [ ] **Step 10: Write `tests/unit/test_job_scorer.py`**
+- [] **Step 10: Write `tests/unit/test_job_scorer.py`**
 
 ```python
 import json
@@ -1006,7 +1006,7 @@ def test_job_scorer_sorts_by_score_descending():
     assert result[-1].fit_score == 6.0
 ```
 
-- [ ] **Step 11: Write `tests/unit/test_contact_scorer.py`**
+- [] **Step 11: Write `tests/unit/test_contact_scorer.py`**
 
 ```python
 import pytest
@@ -1068,7 +1068,7 @@ def test_contact_scorer_standard_order_when_not_veteran():
     assert result[0].category == "hiring_manager"
 ```
 
-- [ ] **Step 12: Write `tests/unit/test_contact_finder.py`**
+- [] **Step 12: Write `tests/unit/test_contact_finder.py`**
 
 ```python
 import pytest
@@ -1136,7 +1136,7 @@ def test_contact_finder_respects_max_per_category():
     assert len(recruiters) <= 3
 ```
 
-- [ ] **Step 13: Write `tests/unit/test_message_generator.py`**
+- [] **Step 13: Write `tests/unit/test_message_generator.py`**
 
 ```python
 import pytest
@@ -1222,7 +1222,7 @@ def test_message_generator_uses_job_description_for_skills():
     assert "Python" in user_payload
 ```
 
-- [ ] **Step 14: Write `tests/unit/test_repositories.py`**
+- [] **Step 14: Write `tests/unit/test_repositories.py`**
 
 ```python
 import pytest
@@ -1297,7 +1297,7 @@ async def test_job_repository_get_all_returns_list():
     assert isinstance(result, list)
 ```
 
-- [ ] **Step 15: Write `tests/unit/test_ui_renderer.py`**
+- [] **Step 15: Write `tests/unit/test_ui_renderer.py`**
 
 ```python
 import json
@@ -1396,7 +1396,7 @@ def test_renderer_priority_summary_includes_name_and_category():
     assert "category" in summary[0]
 ```
 
-- [ ] **Step 16: Write `tests/unit/test_orchestrator.py`**
+- [] **Step 16: Write `tests/unit/test_orchestrator.py`**
 
 ```python
 import pytest
@@ -1490,7 +1490,7 @@ def test_orchestrator_sets_error_state_on_exception(caplog):
     assert len(ctx.errors) > 0
 ```
 
-- [ ] **Step 17: Verify all tests are collected (they will all fail — that's correct)**
+- [] **Step 17: Verify all tests are collected (they will all fail — that's correct)**
 
 ```bash
 pytest tests/unit/ --collect-only 2>&1 | tail -20
@@ -1498,7 +1498,7 @@ pytest tests/unit/ --collect-only 2>&1 | tail -20
 
 Expected: all test files listed, errors about missing implementations.
 
-- [ ] **Step 18: Commit all test files**
+- [] **Step 18: Commit all test files**
 
 ```bash
 git add tests/
@@ -1512,14 +1512,14 @@ git commit -m "test: write all unit tests before implementation (TDD)"
 **Files:**
 - Write: `db/models/resume.py`, `db/models/job.py`, `db/models/contact.py`, `db/models/message.py`
 
-- [ ] **Step 1: Run failing model tests**
+- [x] **Step 1: Run failing model tests**
 
 ```bash
 pytest tests/unit/test_models.py -v
 ```
 Expected: `ImportError` — models not yet implemented.
 
-- [ ] **Step 2: Implement `db/models/resume.py`**
+- [x] **Step 2: Implement `db/models/resume.py`**
 
 ```python
 from pydantic import BaseModel
@@ -1534,7 +1534,7 @@ class ResumeProfile(BaseModel):
     summary: str
 ```
 
-- [ ] **Step 3: Implement `db/models/job.py`**
+- [x] **Step 3: Implement `db/models/job.py`**
 
 ```python
 from pydantic import BaseModel, Field
@@ -1553,7 +1553,7 @@ class Job(BaseModel):
     fit_score: float | None = None
 ```
 
-- [ ] **Step 4: Implement `db/models/contact.py`**
+- [x] **Step 4: Implement `db/models/contact.py`**
 
 ```python
 from pydantic import BaseModel, Field
@@ -1573,7 +1573,7 @@ class Contact(BaseModel):
     notes: str
 ```
 
-- [ ] **Step 5: Implement `db/models/message.py`**
+- [x] **Step 5: Implement `db/models/message.py`**
 
 ```python
 from pydantic import BaseModel, Field, model_validator
@@ -1594,14 +1594,14 @@ class Message(BaseModel):
         return self
 ```
 
-- [ ] **Step 6: Run tests — all must pass**
+- [x] **Step 6: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_models.py -v
 ```
 Expected: all green.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add db/models/
