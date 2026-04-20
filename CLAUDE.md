@@ -60,6 +60,8 @@ When reviewing code:
 
 Goal: Develop the user's problem-solving and design skills, not just complete the app.
 
+At the end of every completed task, always write a commit message for the user.
+
 ---
 
 ## Struggle Tracker Protocol
