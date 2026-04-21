@@ -24,10 +24,10 @@ Updated after every passing test and every completed module. Struggled concepts 
 | `sorted()` with lambda key functions | 🔴 Struggled | — |
 | State value vs context object | 🔴 Struggled | — |
 | `os.getenv` timing (`__post_init__`) | 🔴 Struggled | — |
-| Import style for mockability | 🟡 Needed a nudge | — |
+| Import style for mockability | 🟡 Needed a nudge | 🟡 Needed a nudge — understood patch target after one prompt |
 | Dependency injection pattern | 🟡 Needed a nudge | — |
-| Dataclass `field(default_factory=...)` | 🟢 Solid | — |
-| Enum for type-safe state | 🟢 Solid | — |
+| Dataclass `field(default_factory=...)` | 🟢 Solid | 🟢 Solid — implemented cleanly |
+| Enum for type-safe state | 🟢 Solid | 🟢 Solid — no issues |
 | `json.dumps()` bridge to LLM user messages | 🟢 Solid | — |
 | List comprehension filtering | 🟢 Solid | — |
 | `enumerate()` for positional indexing | 🟢 Solid | — |
@@ -44,5 +44,18 @@ Updated after every passing test and every completed module. Struggled concepts 
 | `default_factory` vs `default` | 🟢 Solid | Correctly explained shared-instance risk unprompted |
 | Pydantic type validation at construction | 🟢 Solid | Understood ValidationError purpose immediately |
 | `is_veteran=(category == "veteran")` inline bool | 🟢 Solid | Read it correctly on first explanation |
+
+## 2026-04-20 — Module: PipelineState + Logger + LLM Protocol (Tasks 5–7)
+
+| Concept | Status | Notes |
+|---|---|---|
+| Python `Protocol` (typing) | 🔴 Struggled | Unfamiliar with the concept; needed explanation before writing tests |
+| `logging.getLogger` vs `logging.Logger` | 🟡 Needed a nudge | Implemented with `Logger()` directly; understood registry pattern after one question |
+| `patch` for mocking external clients | 🟡 Needed a nudge | Understood MagicMock but needed prompt on where patch goes relative to the test |
+| `@runtime_checkable` Protocol + `isinstance` | 🟡 Needed a nudge | Grasped it once shown — used it correctly in test |
+| Chained mock attribute setup (`mock.x.y.return_value`) | 🟢 Solid | Set up `mock_messages.create.return_value.content` correctly without hints |
+| Enum member values (`{s.value for s in Enum}`) | 🟢 Solid | Understood set comprehension over enum members immediately |
+| `dataclass` + `field(default_factory=list)` | 🟢 Solid | Implemented `PipelineContext` cleanly on first attempt |
+| Typo discipline (case sensitivity) | 🟡 Needed a nudge | `GENERATE_MESSAGEs` caught after running tests — fixed promptly |
 
 <!-- Add new entries below as we progress through the build -->

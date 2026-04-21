@@ -491,7 +491,7 @@ def test_message_rejects_text_over_300_chars():
         )
 ```
 
-- [] **Step 2: Write `tests/unit/test_state.py`**
+- [x] **Step 2: Write `tests/unit/test_state.py`**
 
 ```python
 import pytest
@@ -530,7 +530,7 @@ def test_pipeline_context_errors_accumulate():
     assert len(ctx.errors) == 1
 ```
 
-- [] **Step 3: Write `tests/unit/test_logger.py`**
+- [x] **Step 3: Write `tests/unit/test_logger.py`**
 
 ```python
 import logging
@@ -553,7 +553,7 @@ def test_get_logger_different_names_return_different_loggers():
     assert logger_a is not logger_b
 ```
 
-- [] **Step 4: Write `tests/unit/test_llm.py`**
+- [x] **Step 4: Write `tests/unit/test_llm.py`**
 
 ```python
 import pytest
@@ -601,7 +601,7 @@ def test_claude_client_passes_system_and_user_to_sdk():
         assert call_kwargs["messages"][0]["content"] == "user msg"
 ```
 
-- [] **Step 5: Write `tests/unit/test_cv_loader.py`**
+- [ ] **Step 5: Write `tests/unit/test_cv_loader.py`**
 
 ```python
 import pytest
@@ -645,7 +645,7 @@ def test_cv_loader_raises_on_missing_file():
             loader.load("missing.pdf")
 ```
 
-- [] **Step 6: Write `tests/unit/test_cv_parser.py`**
+- [ ] **Step 6: Write `tests/unit/test_cv_parser.py`**
 
 ```python
 import json
@@ -722,7 +722,7 @@ def test_cv_parser_system_prompt_contains_veteran_signals():
     assert "military" in SYSTEM_PROMPT.lower() or "MOS" in SYSTEM_PROMPT
 ```
 
-- [] **Step 7: Write `tests/unit/test_google_search.py`**
+- [ ] **Step 7: Write `tests/unit/test_google_search.py`**
 
 ```python
 import json
@@ -795,7 +795,7 @@ def test_google_searcher_passes_filters_to_llm():
     assert user_payload["location"] == "Denver, CO"
 ```
 
-- [] **Step 8: Write `tests/unit/test_linkedin_search.py`**
+- [ ] **Step 8: Write `tests/unit/test_linkedin_search.py`**
 
 ```python
 import pytest
@@ -866,7 +866,7 @@ def test_linkedin_searcher_filters_old_jobs():
     assert results == []
 ```
 
-- [] **Step 9: Write `tests/unit/test_combiner.py`**
+- [ ] **Step 9: Write `tests/unit/test_combiner.py`**
 
 ```python
 import pytest
@@ -918,7 +918,7 @@ def test_combine_jobs_preserves_unique_jobs_from_both_sources():
     assert companies == {"Acme", "BetaCo", "GammaCo"}
 ```
 
-- [] **Step 10: Write `tests/unit/test_job_scorer.py`**
+- [ ] **Step 10: Write `tests/unit/test_job_scorer.py`**
 
 ```python
 import json
@@ -1006,7 +1006,7 @@ def test_job_scorer_sorts_by_score_descending():
     assert result[-1].fit_score == 6.0
 ```
 
-- [] **Step 11: Write `tests/unit/test_contact_scorer.py`**
+- [ ] **Step 11: Write `tests/unit/test_contact_scorer.py`**
 
 ```python
 import pytest
@@ -1068,7 +1068,7 @@ def test_contact_scorer_standard_order_when_not_veteran():
     assert result[0].category == "hiring_manager"
 ```
 
-- [] **Step 12: Write `tests/unit/test_contact_finder.py`**
+- [ ] **Step 12: Write `tests/unit/test_contact_finder.py`**
 
 ```python
 import pytest
@@ -1136,7 +1136,7 @@ def test_contact_finder_respects_max_per_category():
     assert len(recruiters) <= 3
 ```
 
-- [] **Step 13: Write `tests/unit/test_message_generator.py`**
+- [ ] **Step 13: Write `tests/unit/test_message_generator.py`**
 
 ```python
 import pytest
@@ -1222,7 +1222,7 @@ def test_message_generator_uses_job_description_for_skills():
     assert "Python" in user_payload
 ```
 
-- [] **Step 14: Write `tests/unit/test_repositories.py`**
+- [ ] **Step 14: Write `tests/unit/test_repositories.py`**
 
 ```python
 import pytest
@@ -1297,7 +1297,7 @@ async def test_job_repository_get_all_returns_list():
     assert isinstance(result, list)
 ```
 
-- [] **Step 15: Write `tests/unit/test_ui_renderer.py`**
+- [ ] **Step 15: Write `tests/unit/test_ui_renderer.py`**
 
 ```python
 import json
@@ -1396,7 +1396,7 @@ def test_renderer_priority_summary_includes_name_and_category():
     assert "category" in summary[0]
 ```
 
-- [] **Step 16: Write `tests/unit/test_orchestrator.py`**
+- [ ] **Step 16: Write `tests/unit/test_orchestrator.py`**
 
 ```python
 import pytest
@@ -1490,7 +1490,7 @@ def test_orchestrator_sets_error_state_on_exception(caplog):
     assert len(ctx.errors) > 0
 ```
 
-- [] **Step 17: Verify all tests are collected (they will all fail — that's correct)**
+- [x] **Step 17: Verify all tests are collected (they will all fail — that's correct)**
 
 ```bash
 pytest tests/unit/ --collect-only 2>&1 | tail -20
@@ -1498,7 +1498,7 @@ pytest tests/unit/ --collect-only 2>&1 | tail -20
 
 Expected: all test files listed, errors about missing implementations.
 
-- [] **Step 18: Commit all test files**
+- [x] **Step 18: Commit all test files**
 
 ```bash
 git add tests/
@@ -1615,14 +1615,14 @@ git commit -m "feat: implement Pydantic models — Job, Contact, Message, Resume
 **Files:**
 - Write: `pipeline/state.py`
 
-- [ ] **Step 1: Run failing state tests**
+- [x] **Step 1: Run failing state tests**
 
 ```bash
 pytest tests/unit/test_state.py -v
 ```
 Expected: `ImportError`.
 
-- [ ] **Step 2: Implement `pipeline/state.py`**
+- [x] **Step 2: Implement `pipeline/state.py`**
 
 ```python
 from enum import Enum
@@ -1657,13 +1657,13 @@ class PipelineContext:
 
 > Note: `Any` types avoid a circular import — `SearchFilters` is implemented after `state.py`. The orchestrator enforces the real types at runtime.
 
-- [ ] **Step 3: Run tests — all must pass**
+- [x] **Step 3: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_state.py -v
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add pipeline/state.py search/filters.py
@@ -1677,13 +1677,13 @@ git commit -m "feat: implement PipelineState enum and PipelineContext"
 **Files:**
 - Write: `utils/logger.py`
 
-- [ ] **Step 1: Run failing logger tests**
+- [x] **Step 1: Run failing logger tests**
 
 ```bash
 pytest tests/unit/test_logger.py -v
 ```
 
-- [ ] **Step 2: Implement `utils/logger.py`**
+- [x] **Step 2: Implement `utils/logger.py`**
 
 ```python
 import logging
@@ -1693,13 +1693,13 @@ def get_logger(name: str) -> logging.Logger:
     return logging.getLogger(name)
 ```
 
-- [ ] **Step 3: Run tests — all must pass**
+- [x] **Step 3: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_logger.py -v
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add utils/logger.py
@@ -1713,13 +1713,13 @@ git commit -m "feat: implement get_logger factory"
 **Files:**
 - Write: `llm/protocol.py`, `llm/claude.py`
 
-- [ ] **Step 1: Run failing LLM tests**
+- [x] **Step 1: Run failing LLM tests**
 
 ```bash
 pytest tests/unit/test_llm.py -v
 ```
 
-- [ ] **Step 2: Implement `llm/protocol.py`**
+- [x] **Step 2: Implement `llm/protocol.py`**
 
 ```python
 from typing import Protocol, runtime_checkable
@@ -1731,7 +1731,7 @@ class LLMClient(Protocol):
         ...
 ```
 
-- [ ] **Step 3: Implement `llm/claude.py`**
+- [x] **Step 3: Implement `llm/claude.py`**
 
 ```python
 import anthropic
@@ -1753,7 +1753,7 @@ class ClaudeClient:
         return response.content[0].text
 ```
 
-- [ ] **Step 4: Run tests — all must pass**
+- [x] **Step 4: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_llm.py -v
