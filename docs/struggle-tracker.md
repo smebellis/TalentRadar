@@ -70,4 +70,23 @@ Updated after every passing test and every completed module. Struggled concepts 
 | Where to instantiate SDK client (`__init__` vs `complete`) | 🟢 Solid | Correctly chose `__init__` without prompting |
 | Extracting `response.content[0].text` | 🟢 Solid | Reasoned through list indexing and `.text` attribute correctly |
 
+## 2026-04-22 — Module: CVLoader (Task 3 Step 5 + Implementation)
+
+| Concept | Status | Notes |
+|---|---|---|
+| Separation of concerns (loader vs parser) | 🟡 Needed a nudge | Initially thought CVLoader should return a ResumeProfile; one question clarified the two-module split |
+| String vs bytes (`get_text()` vs `encode`) | 🟡 Needed a nudge | Had `encode("utf8")` — corrected on first question |
+| Accumulating vs overwriting in a loop | 🟡 Needed a nudge | Loop was overwriting `text` each iteration; reasoned through to list comprehension + join |
+| `"\n".join([...])` pattern | 🟢 Solid | Reached the list comprehension approach independently after loop issue was identified |
+
+## 2026-04-22 — Module: CVParser (Task 3 Step 6 + Implementation)
+
+| Concept | Status | Notes |
+|---|---|---|
+| `json.dumps` vs `json.loads` | 🔴 Struggled | Used `dumps` (dict→string) when `loads` (string→dict) was needed; needed direct correction |
+| `**data` dict unpacking into Pydantic model | 🔴 Struggled | Tried positional and dot-notation before reaching keyword unpacking |
+| LLM call belongs inside `parse`, not a separate method | 🟡 Needed a nudge | Extracted `complete` as a separate CVParser method; redirected with one question |
+| `system=` and `user=` as keyword args to `llm.complete` | 🟡 Needed a nudge | Passed positionally first; corrected after looking at test assertion |
+| Module-level string constant vs config/env var | 🟡 Needed a nudge | Initially thought SYSTEM_PROMPT was an env var or argument; one question clarified |
+
 <!-- Add new entries below as we progress through the build -->

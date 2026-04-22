@@ -601,7 +601,7 @@ def test_claude_client_passes_system_and_user_to_sdk():
         assert call_kwargs["messages"][0]["content"] == "user msg"
 ```
 
-- [ ] **Step 5: Write `tests/unit/test_cv_loader.py`**
+- [x] **Step 5: Write `tests/unit/test_cv_loader.py`**
 
 ```python
 import pytest
@@ -645,7 +645,7 @@ def test_cv_loader_raises_on_missing_file():
             loader.load("missing.pdf")
 ```
 
-- [ ] **Step 6: Write `tests/unit/test_cv_parser.py`**
+- [x] **Step 6: Write `tests/unit/test_cv_parser.py`**
 
 ```python
 import json
