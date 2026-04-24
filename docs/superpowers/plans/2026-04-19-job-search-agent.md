@@ -722,7 +722,7 @@ def test_cv_parser_system_prompt_contains_veteran_signals():
     assert "military" in SYSTEM_PROMPT.lower() or "MOS" in SYSTEM_PROMPT
 ```
 
-- [ ] **Step 7: Write `tests/unit/test_google_search.py`**
+- [x] **Step 7: Write `tests/unit/test_google_search.py`**
 
 ```python
 import json
@@ -795,7 +795,7 @@ def test_google_searcher_passes_filters_to_llm():
     assert user_payload["location"] == "Denver, CO"
 ```
 
-- [ ] **Step 8: Write `tests/unit/test_linkedin_search.py`**
+- [x] **Step 8: Write `tests/unit/test_linkedin_search.py`**
 
 ```python
 import pytest
@@ -1773,7 +1773,7 @@ git commit -m "feat: implement LLMClient protocol and ClaudeClient"
 **Files:**
 - Write: `search/filters.py`
 
-- [ ] **Step 1: Implement `search/filters.py`**
+- [x] **Step 1: Implement `search/filters.py`**
 
 ```python
 from pydantic import BaseModel
@@ -1788,13 +1788,13 @@ class SearchFilters(BaseModel):
     time_window_hours: int = 24
 ```
 
-- [ ] **Step 2: Verify state tests still pass (SearchFilters is imported there)**
+- [x] **Step 2: Verify state tests still pass (SearchFilters is imported there)**
 
 ```bash
 pytest tests/unit/test_state.py tests/unit/test_models.py -v
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add search/filters.py
@@ -1919,13 +1919,13 @@ git commit -m "feat: implement CVParser with veteran inference prompt"
 **Files:**
 - Write: `search/google.py`
 
-- [ ] **Step 1: Run failing Google search tests**
+- [x] **Step 1: Run failing Google search tests**
 
 ```bash
 pytest tests/unit/test_google_search.py -v
 ```
 
-- [ ] **Step 2: Implement `search/google.py`**
+- [x] **Step 2: Implement `search/google.py`**
 
 ```python
 import json

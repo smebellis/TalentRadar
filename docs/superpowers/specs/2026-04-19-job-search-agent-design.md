@@ -58,7 +58,7 @@ CLI / Scheduler
 | `llm/claude.py` | Claude implementation of `LLMClient` |
 | `cv/loader.py` | Load PDF resume via `pymupdf` → raw text |
 | `cv/parser.py` | LLM prompt → structured `ResumeProfile` (infers `is_veteran`) |
-| `search/filters.py` | `SearchFilters` dataclass: location, keywords, remote/onsite, job_type, time_window |
+| `search/filters.py` | `SearchFilters` Pydantic model: keywords, location, time_window_hours |
 | `search/google.py` | Claude web search tool → job listings |
 | `search/linkedin.py` | Apify LinkedIn scraper → job listings |
 | `pipeline/combiner.py` | Merge + deduplicate results from both sources |
@@ -124,7 +124,7 @@ job_search_agent/
 │   └── job_scorer.py          # Score jobs 0-10 against ResumeProfile
 │
 ├── search/
-│   ├── filters.py             # SearchFilters dataclass
+│   ├── filters.py             # SearchFilters Pydantic model
 │   ├── google.py              # Claude web search → job listings
 │   └── linkedin.py            # Apify LinkedIn scraper → job listings
 │

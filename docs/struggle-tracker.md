@@ -89,4 +89,30 @@ Updated after every passing test and every completed module. Struggled concepts 
 | `system=` and `user=` as keyword args to `llm.complete` | 🟡 Needed a nudge | Passed positionally first; corrected after looking at test assertion |
 | Module-level string constant vs config/env var | 🟡 Needed a nudge | Initially thought SYSTEM_PROMPT was an env var or argument; one question clarified |
 
+## 2026-04-23 — Module: SearchFilters + GoogleJobSearcher (Step 7)
+
+| Concept | Status | Notes |
+|---|---|---|
+| Time-window filter condition (`job.posted_at > now - timedelta`) | 🔴 Struggled | Blanked on the condition entirely; also confused where `job` variable existed in the loop |
+| Hardcoded value vs config field (`48` vs `filters.time_window_hours`) | 🔴 Struggled | Hardcoded 48 twice — once during implementation, once after tests passed |
+| Pydantic v2 `model_dump_json()` vs `.json()` | 🟡 Needed a nudge | Knew about `.json()` but needed to be told Pydantic v2 uses `model_dump_json()` |
+| Return type: `list` vs single object | 🟡 Needed a nudge | Initially returned a single `Job`; corrected after one question about `len(results)` |
+| `source="google"` hardcoded vs reading from LLM response | 🟡 Needed a nudge | Got a KeyError on `source` before realising it should be hardcoded |
+| Pydantic BaseModel vs dataclass for SearchFilters | 🟡 Needed a nudge | Said dataclass first; one question redirected to BaseModel |
+| `list[str]` type annotation | 🟡 Needed a nudge | Wrote bare `list` without the type parameter |
+| `datetime.now(timezone.utc)` for tz-aware comparison | 🟢 Solid | Reached this independently once the comparison was framed |
+| Dependency injection (`llm: LLMClient` in `__init__`) | 🟢 Solid | Applied the pattern correctly without prompting |
+
+## 2026-04-24 — Module: LinkedInJobSearcher (Step 8)
+
+| Concept | Status | Notes |
+|---|---|---|
+| Sync vs async (no `await` in test = sync method) | 🔴 Struggled | Used `ApifyClientAsync` and `async def` — needed two rounds to connect test call style to sync requirement |
+| Patch target maps to the file that imports it | 🟡 Needed a nudge | Initially thought `ApifyClient` needed to be imported in `LLMClient`; one question on the patch path resolved it |
+| Dataset called on `ApifyClient` instance, not actor | 🟡 Needed a nudge | Called `actor_client.dataset()` first; corrected after tracing mock chain |
+| Raw dict → `Job` conversion (architectural rule) | 🟡 Needed a nudge | Returned raw dicts initially; question about test assertion redirected to model construction |
+| `_recent_iso()` purpose (time-relative test data) | 🟢 Solid | Correctly explained why hardcoded timestamps would always fail the filter |
+| `run["defaultDatasetId"]` from actor run | 🟢 Solid | Traced the mock chain correctly after being guided to it |
+| `filters.keywords` / `filters.location` in `run_input` | 🟢 Solid | Spotted the empty `run_input` independently and fixed it without prompting |
+
 <!-- Add new entries below as we progress through the build -->
