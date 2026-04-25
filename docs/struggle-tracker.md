@@ -115,4 +115,14 @@ Updated after every passing test and every completed module. Struggled concepts 
 | `run["defaultDatasetId"]` from actor run | 🟢 Solid | Traced the mock chain correctly after being guided to it |
 | `filters.keywords` / `filters.location` in `run_input` | 🟢 Solid | Spotted the empty `run_input` independently and fixed it without prompting |
 
+## 2026-04-25 — Module: Combiner (Step 9)
+
+| Concept | Status | Notes |
+|---|---|---|
+| Dict as dedup structure (key → object) | 🟡 Needed a nudge | Started with a set, then a list concat; redirected to dict after one question about retaining the Job object |
+| `setdefault` for "insert only if missing" | 🟡 Needed a nudge | Knew the mechanism but initially passed two separate args instead of a tuple key |
+| Tuple as composite dict key `(title, company)` | 🟡 Needed a nudge | Wrote `job = (Job.title, Job.company)` — class vs instance and key-vs-assignment confusion; corrected with two prompts |
+| `.values()` to extract objects from dict | 🔴 Struggled | Used `list(combined_jobs)` which returns keys; needed direct hint on `.values()` |
+| Naming consistency (dict name vs function name) | 🟡 Needed a nudge | Typed `combine_jobs[...]` (function name) when dict was `combined_jobs` — caught by tests |
+
 <!-- Add new entries below as we progress through the build -->

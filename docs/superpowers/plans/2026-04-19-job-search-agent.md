@@ -866,7 +866,7 @@ def test_linkedin_searcher_filters_old_jobs():
     assert results == []
 ```
 
-- [ ] **Step 9: Write `tests/unit/test_combiner.py`**
+- [x] **Step 9: Write `tests/unit/test_combiner.py`**
 
 ```python
 import pytest
