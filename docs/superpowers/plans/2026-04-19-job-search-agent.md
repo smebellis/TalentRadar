@@ -918,7 +918,7 @@ def test_combine_jobs_preserves_unique_jobs_from_both_sources():
     assert companies == {"Acme", "BetaCo", "GammaCo"}
 ```
 
-- [ ] **Step 10: Write `tests/unit/test_job_scorer.py`**
+- [x] **Step 10: Write `tests/unit/test_job_scorer.py`**
 
 ```python
 import json
@@ -2121,13 +2121,13 @@ git commit -m "feat: implement job combiner with title+company deduplication"
 **Files:**
 - Write: `scoring/job_scorer.py`
 
-- [ ] **Step 1: Run failing job scorer tests**
+- [x] **Step 1: Run failing job scorer tests**
 
 ```bash
 pytest tests/unit/test_job_scorer.py -v
 ```
 
-- [ ] **Step 2: Implement `scoring/job_scorer.py`**
+- [x] **Step 2: Implement `scoring/job_scorer.py`**
 
 ```python
 import json
@@ -2172,13 +2172,13 @@ class JobScorer:
         return sorted(jobs, key=lambda j: j.fit_score or 0.0, reverse=True)
 ```
 
-- [ ] **Step 3: Run tests — all must pass**
+- [x] **Step 3: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_job_scorer.py -v
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add scoring/job_scorer.py

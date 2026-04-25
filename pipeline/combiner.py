@@ -5,4 +5,5 @@ def combine_jobs(google_jobs: list, linkedin_jobs: list) -> list:
 
     for job in linkedin_jobs:
         combined_jobs.setdefault((job.title, job.company), job)
+
     return list(combined_jobs.values())

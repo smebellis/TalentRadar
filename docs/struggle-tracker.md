@@ -21,7 +21,7 @@ Updated after every passing test and every completed module. Struggled concepts 
 | Mock ordering (define → patch → create → test) | 🔴 Struggled ×3 | — |
 | Class-level vs instance-level attribute access | 🔴 Struggled ×3 | — |
 | Wrong data source (raw dict vs scored model) | 🔴 Struggled ×2 | — |
-| `sorted()` with lambda key functions | 🔴 Struggled | — |
+| `sorted()` with lambda key functions | 🔴 Struggled | 🟢 Solid — found lambda key independently after one prompt in Take 2 |
 | State value vs context object | 🔴 Struggled | — |
 | `os.getenv` timing (`__post_init__`) | 🔴 Struggled | — |
 | Import style for mockability | 🟡 Needed a nudge | 🟡 Needed a nudge — understood patch target after one prompt |
@@ -124,5 +124,16 @@ Updated after every passing test and every completed module. Struggled concepts 
 | Tuple as composite dict key `(title, company)` | 🟡 Needed a nudge | Wrote `job = (Job.title, Job.company)` — class vs instance and key-vs-assignment confusion; corrected with two prompts |
 | `.values()` to extract objects from dict | 🔴 Struggled | Used `list(combined_jobs)` which returns keys; needed direct hint on `.values()` |
 | Naming consistency (dict name vs function name) | 🟡 Needed a nudge | Typed `combine_jobs[...]` (function name) when dict was `combined_jobs` — caught by tests |
+
+## 2026-04-25 — Module: JobScorer (Task 3 Step 10 + Implementation)
+
+| Concept | Status | Notes |
+|---|---|---|
+| Direction of scoring (job scored against resume, not resume scored) | 🟡 Needed a nudge | Initially described it backwards; one question about which model has `fit_score` resolved it |
+| JSON object vs array for single-item LLM response | 🟡 Needed a nudge | Said array first; guided to object since one job = one call |
+| `list[Job]` parameter vs single `Job` | 🟡 Needed a nudge | Wrote singular `job` then indexed `job[0]`; corrected after one question about parameter name |
+| f-string to combine fields into LLM user prompt | 🟡 Needed a nudge | Was building a growing list of tuples across loop iterations; needed direct example to shift to per-iteration f-string |
+| `sorted()` with lambda key | 🟢 Solid | Found `key=lambda c: c.fit_score` independently after one prompt — improvement over Take 1 |
+| `breakpoint()` left in code | 🔴 Recurring habit | Second occurrence this session; watch for this on every implementation going forward |
 
 <!-- Add new entries below as we progress through the build -->
