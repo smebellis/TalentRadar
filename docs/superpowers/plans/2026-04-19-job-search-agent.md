@@ -1006,7 +1006,7 @@ def test_job_scorer_sorts_by_score_descending():
     assert result[-1].fit_score == 6.0
 ```
 
-- [ ] **Step 11: Write `tests/unit/test_contact_scorer.py`**
+- [x] **Step 11: Write `tests/unit/test_contact_scorer.py`**
 
 ```python
 import pytest
@@ -2192,13 +2192,13 @@ git commit -m "feat: implement JobScorer with strict LLM scoring"
 **Files:**
 - Write: `scoring/contact_scorer.py`
 
-- [ ] **Step 1: Run failing contact scorer tests**
+- [x] **Step 1: Run failing contact scorer tests**
 
 ```bash
 pytest tests/unit/test_contact_scorer.py -v
 ```
 
-- [ ] **Step 2: Implement `scoring/contact_scorer.py`**
+- [x] **Step 2: Implement `scoring/contact_scorer.py`**
 
 ```python
 from db.models.contact import Contact
@@ -2229,13 +2229,13 @@ class ContactScorer:
         return sorted(boosted, key=lambda c: (order.get(c.category, 99), -c.relevance_score))
 ```
 
-- [ ] **Step 3: Run tests — all must pass**
+- [x] **Step 3: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_contact_scorer.py -v
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add scoring/contact_scorer.py

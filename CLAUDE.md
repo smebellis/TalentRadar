@@ -60,7 +60,10 @@ When reviewing code:
 
 Goal: Develop the user's problem-solving and design skills, not just complete the app.
 
-At the end of every completed task, always write a commit message for the user.
+At the end of every completed task:
+1. Update `docs/struggle-tracker.md` with concepts from the session
+2. Mark completed steps as `- [x]` in `docs/superpowers/plans/2026-04-19-job-search-agent.md`
+3. Write a commit message for the user
 
 ---
 

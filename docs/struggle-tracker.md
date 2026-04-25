@@ -136,4 +136,16 @@ Updated after every passing test and every completed module. Struggled concepts 
 | `sorted()` with lambda key | 🟢 Solid | Found `key=lambda c: c.fit_score` independently after one prompt — improvement over Take 1 |
 | `breakpoint()` left in code | 🔴 Recurring habit | Second occurrence this session; watch for this on every implementation going forward |
 
+## 2026-04-25 — Module: ContactScorer (Step 11)
+
+| Concept | Status | Notes |
+|---|---|---|
+| `sorted()` with lambda key functions | 🟡 Needed a nudge | Aware it was needed but syntax still uncomfortable — needed a prompt to connect `self.PRIORITIES[item.category]` as the key |
+| Class variable as lookup table | 🟡 Needed a nudge | First intentional use; understood immutability tradeoff after one question |
+| Double condition guard (searcher AND contact both veteran) | 🟡 Needed a nudge | Initially set `item.is_veteran = True` instead of checking it; corrected after one question |
+| `+=` vs `=` for applying a boost | 🟡 Needed a nudge | Used `= self.veteran_boost` (set) instead of `+= self.veteran_boost` (add); caught on first review |
+| `breakpoint()` left in code | 🔴 Recurring habit | Third occurrence — must scan for debug statements before every review |
+| List comprehension for filtering | 🟢 Solid | Chose it independently and used correct condition |
+| Parameter naming (plural vs keyword match) | 🟡 Needed a nudge | `contact` vs `contacts` and `is_veteran` vs `searcher_is_veteran` — caught on signature review |
+
 <!-- Add new entries below as we progress through the build -->
