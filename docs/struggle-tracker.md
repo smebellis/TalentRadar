@@ -168,4 +168,14 @@ Updated after every passing test and every completed module. Struggled concepts 
 | Company filter inside loop (`continue` pattern) | 🟢 Solid | Implemented correctly first try |
 | `category_counts` dict for max-per-category guard | 🟢 Solid | Understood the pattern and applied it cleanly |
 
+## 2026-04-26 — Module: Database Repositories (Task 18)
+
+| Concept | Status | Notes |
+|---|---|---|
+| `MagicMock` vs `AsyncMock` for pool mock | 🔴 Struggled | Knew `pool.acquire()` returns an object (not coroutine), but kept saying `AsyncMock`; needed several rounds to connect that to using `MagicMock` for the pool |
+| `__aenter__`/`__aexit__` must be `AsyncMock` | 🟡 Needed a nudge | Once the pool was a `MagicMock`, understood that the async context manager protocol still needs `AsyncMock` for `__aenter__`/`__aexit__` |
+| Parameterized queries (`$1, $2, ...`) vs string interpolation | 🟢 Solid | Reached parameterized syntax independently after one prompt on SQL injection |
+| `async with self.pool.acquire() as conn:` pattern | 🟢 Solid | Once mock issue was resolved, implemented both repos cleanly |
+| `save(contact, job_id)` signature vs `save(job, contact)` | 🟡 Needed a nudge | Swapped argument order and type; caught after comparing test call signature |
+
 <!-- Add new entries below as we progress through the build -->

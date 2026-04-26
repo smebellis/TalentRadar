@@ -1222,7 +1222,7 @@ def test_message_generator_uses_job_description_for_skills():
     assert "Python" in user_payload
 ```
 
-- [ ] **Step 14: Write `tests/unit/test_repositories.py`**
+- [x] **Step 14: Write `tests/unit/test_repositories.py`**
 
 ```python
 import pytest
@@ -2449,7 +2449,7 @@ git commit -m "feat: implement MessageGenerator with category-specific prompts"
 **Files:**
 - Write: `db/connection.py`, `db/repositories/job_repo.py`, `db/repositories/contact_repo.py`
 
-- [ ] **Step 1: Run failing repository tests**
+- [x] **Step 1: Run failing repository tests**
 
 ```bash
 pytest tests/unit/test_repositories.py -v
@@ -2474,7 +2474,7 @@ async def create_pool(host: str, port: int, db: str, user: str,
     )
 ```
 
-- [ ] **Step 3: Implement `db/repositories/job_repo.py`**
+- [x] **Step 3: Implement `db/repositories/job_repo.py`**
 
 ```python
 from db.models.job import Job
@@ -2510,7 +2510,7 @@ class JobRepository:
         return [dict(row) for row in rows]
 ```
 
-- [ ] **Step 4: Implement `db/repositories/contact_repo.py`**
+- [x] **Step 4: Implement `db/repositories/contact_repo.py`**
 
 ```python
 from uuid import UUID
@@ -2542,7 +2542,7 @@ class ContactRepository:
         logger.debug(f"Saved contact: {contact.name}")
 ```
 
-- [ ] **Step 5: Run tests — all must pass**
+- [x] **Step 5: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_repositories.py -v
