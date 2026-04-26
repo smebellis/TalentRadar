@@ -188,4 +188,15 @@ Updated after every passing test and every completed module. Struggled concepts 
 | List comprehension to build row dicts | 🟢 Solid | Implemented `job_rows` and `contact_rows` cleanly |
 | Lookup dict pattern (`{id: value}`) to join messages to contacts | 🟢 Solid | Built `msg_by_contact` independently |
 
+## 2026-04-26 — Module: Orchestrator (Task 20)
+
+| Concept | Status | Notes |
+|---|---|---|
+| `try/except Exception as e` for pipeline error handling | 🟡 Needed a nudge | Wrote bare `except:` and referenced `PipelineState.ERROR` without setting it; corrected after two questions |
+| `ctx = X` vs `ctx.state = X` (overwriting context) | 🔴 Struggled | Wrote `ctx = PipelineState.FINDING_CONTACTS` — overwrote the whole context; needed direct question to spot it |
+| `asyncio.gather` result unpacking | 🟢 Solid | Reached tuple unpacking independently |
+| `asyncio.to_thread` for sync methods in async context | 🟢 Solid | Applied correctly without prompting |
+| `Optional[ResumeProfile]` / `Optional[SearchFilters]` on dataclass | 🟡 Needed a nudge | Used `Optional[Type]` (wrong — means a class) instead of the actual model types |
+| Cleaning up unused imports | 🟢 Solid | Identified and removed all unused imports when asked |
+
 <!-- Add new entries below as we progress through the build -->

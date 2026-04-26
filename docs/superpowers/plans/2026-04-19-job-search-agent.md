@@ -1396,7 +1396,7 @@ def test_renderer_priority_summary_includes_name_and_category():
     assert "category" in summary[0]
 ```
 
-- [ ] **Step 16: Write `tests/unit/test_orchestrator.py`**
+- [x] **Step 16: Write `tests/unit/test_orchestrator.py`**
 
 ```python
 import pytest
@@ -2658,13 +2658,13 @@ git commit -m "feat: implement A2UI JSON renderer"
 **Files:**
 - Write: `pipeline/orchestrator.py`
 
-- [ ] **Step 1: Run failing orchestrator tests**
+- [x] **Step 1: Run failing orchestrator tests**
 
 ```bash
 pytest tests/unit/test_orchestrator.py -v
 ```
 
-- [ ] **Step 2: Implement `pipeline/orchestrator.py`**
+- [x] **Step 2: Implement `pipeline/orchestrator.py`**
 
 ```python
 import asyncio
@@ -2753,13 +2753,13 @@ class Orchestrator:
         return ctx
 ```
 
-- [ ] **Step 3: Run tests — all must pass**
+- [x] **Step 3: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_orchestrator.py -v
 ```
 
-- [ ] **Step 4: Run the full unit test suite — all must pass**
+- [x] **Step 4: Run the full unit test suite — all must pass**
 
 ```bash
 pytest tests/unit/ -v --tb=short

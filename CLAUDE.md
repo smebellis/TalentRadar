@@ -60,6 +60,9 @@ When reviewing code:
 
 Goal: Develop the user's problem-solving and design skills, not just complete the app.
 
+When the user says "take a look", always read the relevant file directly — do not ask them to paste or show code.
+
+
 At the end of every completed task:
 1. Update `docs/struggle-tracker.md` with concepts from the session
 2. Mark completed steps as `- [x]` in `docs/superpowers/plans/2026-04-19-job-search-agent.md`
