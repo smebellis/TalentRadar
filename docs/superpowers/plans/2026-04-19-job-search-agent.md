@@ -1136,7 +1136,7 @@ def test_contact_finder_respects_max_per_category():
     assert len(recruiters) <= 3
 ```
 
-- [ ] **Step 13: Write `tests/unit/test_message_generator.py`**
+- [x] **Step 13: Write `tests/unit/test_message_generator.py`**
 
 ```python
 import pytest
@@ -1759,7 +1759,7 @@ class ClaudeClient:
 pytest tests/unit/test_llm.py -v
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add llm/
@@ -1808,13 +1808,13 @@ git commit -m "feat: implement SearchFilters model"
 **Files:**
 - Write: `cv/loader.py`
 
-- [ ] **Step 1: Run failing CV loader tests**
+- [x] **Step 1: Run failing CV loader tests**
 
 ```bash
 pytest tests/unit/test_cv_loader.py -v
 ```
 
-- [ ] **Step 2: Implement `cv/loader.py`**
+- [x] **Step 2: Implement `cv/loader.py`**
 
 ```python
 import fitz
@@ -1831,13 +1831,13 @@ class CVLoader:
         return "\n".join(page.get_text() for page in doc)
 ```
 
-- [ ] **Step 3: Run tests — all must pass**
+- [x] **Step 3: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_cv_loader.py -v
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add cv/loader.py
@@ -1851,13 +1851,13 @@ git commit -m "feat: implement CVLoader with pymupdf"
 **Files:**
 - Write: `cv/parser.py`
 
-- [ ] **Step 1: Run failing CV parser tests**
+- [x] **Step 1: Run failing CV parser tests**
 
 ```bash
 pytest tests/unit/test_cv_parser.py -v
 ```
 
-- [ ] **Step 2: Implement `cv/parser.py`**
+- [x] **Step 2: Implement `cv/parser.py`**
 
 ```python
 import json
@@ -1899,13 +1899,13 @@ class CVParser:
         return ResumeProfile(**data)
 ```
 
-- [ ] **Step 3: Run tests — all must pass**
+- [x] **Step 3: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_cv_parser.py -v
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add cv/parser.py
@@ -1983,13 +1983,13 @@ class GoogleJobSearcher:
         return jobs
 ```
 
-- [ ] **Step 3: Run tests — all must pass**
+- [x] **Step 3: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_google_search.py -v
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add search/google.py
@@ -2003,13 +2003,13 @@ git commit -m "feat: implement GoogleJobSearcher via Claude web search"
 **Files:**
 - Write: `search/linkedin.py`
 
-- [ ] **Step 1: Run failing LinkedIn search tests**
+- [x] **Step 1: Run failing LinkedIn search tests**
 
 ```bash
 pytest tests/unit/test_linkedin_search.py -v
 ```
 
-- [ ] **Step 2: Implement `search/linkedin.py`**
+- [x] **Step 2: Implement `search/linkedin.py`**
 
 ```python
 from datetime import datetime, timezone, timedelta
@@ -2055,13 +2055,13 @@ class LinkedInJobSearcher:
         return jobs
 ```
 
-- [ ] **Step 3: Run tests — all must pass**
+- [x] **Step 3: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_linkedin_search.py -v
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add search/linkedin.py
@@ -2075,13 +2075,13 @@ git commit -m "feat: implement LinkedInJobSearcher via Apify"
 **Files:**
 - Write: `pipeline/combiner.py`
 
-- [ ] **Step 1: Run failing combiner tests**
+- [x] **Step 1: Run failing combiner tests**
 
 ```bash
 pytest tests/unit/test_combiner.py -v
 ```
 
-- [ ] **Step 2: Implement `pipeline/combiner.py`**
+- [x] **Step 2: Implement `pipeline/combiner.py`**
 
 ```python
 from db.models.job import Job
@@ -2101,13 +2101,13 @@ def combine_jobs(google_jobs: list[Job], linkedin_jobs: list[Job]) -> list[Job]:
     return list(seen.values())
 ```
 
-- [ ] **Step 3: Run tests — all must pass**
+- [x] **Step 3: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_combiner.py -v
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add pipeline/combiner.py
@@ -2350,13 +2350,13 @@ git commit -m "feat: implement ContactFinder with 4 categories and veteran detec
 **Files:**
 - Write: `messaging/generator.py`
 
-- [ ] **Step 1: Run failing message generator tests**
+- [x] **Step 1: Run failing message generator tests**
 
 ```bash
 pytest tests/unit/test_message_generator.py -v
 ```
 
-- [ ] **Step 2: Implement `messaging/generator.py`**
+- [x] **Step 2: Implement `messaging/generator.py`**
 
 ```python
 import json
@@ -2429,7 +2429,7 @@ class MessageGenerator:
         return Message(contact_id=contact.id, job_id=job.id, message_text=text)
 ```
 
-- [ ] **Step 3: Run tests — all must pass**
+- [x] **Step 3: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_message_generator.py -v
