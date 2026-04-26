@@ -178,4 +178,14 @@ Updated after every passing test and every completed module. Struggled concepts 
 | `async with self.pool.acquire() as conn:` pattern | 🟢 Solid | Once mock issue was resolved, implemented both repos cleanly |
 | `save(contact, job_id)` signature vs `save(job, contact)` | 🟡 Needed a nudge | Swapped argument order and type; caught after comparing test call signature |
 
+## 2026-04-26 — Module: UIRenderer (Task 19)
+
+| Concept | Status | Notes |
+|---|---|---|
+| A2UI output structure (type, version, tables, summary) | 🔴 Struggled | Unfamiliar with the format; needed to consult the implementation plan to understand top-level keys and table shape |
+| Building nested dicts for JSON output | 🔴 Struggled | Needed the plan spec to understand how to structure `job_table`, `contact_table`, and `priority_summary` as nested dicts |
+| `json.dumps(..., default=str)` for UUID/datetime serialization | 🟢 Solid | Applied it correctly without prompting |
+| List comprehension to build row dicts | 🟢 Solid | Implemented `job_rows` and `contact_rows` cleanly |
+| Lookup dict pattern (`{id: value}`) to join messages to contacts | 🟢 Solid | Built `msg_by_contact` independently |
+
 <!-- Add new entries below as we progress through the build -->

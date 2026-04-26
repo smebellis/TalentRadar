@@ -1297,7 +1297,7 @@ async def test_job_repository_get_all_returns_list():
     assert isinstance(result, list)
 ```
 
-- [ ] **Step 15: Write `tests/unit/test_ui_renderer.py`**
+- [x] **Step 15: Write `tests/unit/test_ui_renderer.py`**
 
 ```python
 import json
@@ -2435,7 +2435,7 @@ class MessageGenerator:
 pytest tests/unit/test_message_generator.py -v
 ```
 
-- [ ] **Step 4: Commit**
+- [X] **Step 4: Commit**
 
 ```bash
 git add messaging/generator.py
@@ -2548,7 +2548,7 @@ class ContactRepository:
 pytest tests/unit/test_repositories.py -v
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add db/
@@ -2562,13 +2562,13 @@ git commit -m "feat: implement asyncpg database layer — connection pool and re
 **Files:**
 - Write: `ui/renderer.py`
 
-- [ ] **Step 1: Run failing UI renderer tests**
+- [x] **Step 1: Run failing UI renderer tests**
 
 ```bash
 pytest tests/unit/test_ui_renderer.py -v
 ```
 
-- [ ] **Step 2: Implement `ui/renderer.py`**
+- [x] **Step 2: Implement `ui/renderer.py`**
 
 ```python
 import json
@@ -2638,13 +2638,13 @@ class UIRenderer:
         return json.dumps(output, indent=2, default=str)
 ```
 
-- [ ] **Step 3: Run tests — all must pass**
+- [x] **Step 3: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_ui_renderer.py -v
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add ui/renderer.py
