@@ -1068,7 +1068,7 @@ def test_contact_scorer_standard_order_when_not_veteran():
     assert result[0].category == "hiring_manager"
 ```
 
-- [ ] **Step 12: Write `tests/unit/test_contact_finder.py`**
+- [x] **Step 12: Write `tests/unit/test_contact_finder.py`**
 
 ```python
 import pytest
@@ -2249,13 +2249,13 @@ git commit -m "feat: implement ContactScorer with veteran boost and category ord
 **Files:**
 - Write: `contacts/finder.py`
 
-- [ ] **Step 1: Run failing contact finder tests**
+- [x] **Step 1: Run failing contact finder tests**
 
 ```bash
 pytest tests/unit/test_contact_finder.py -v
 ```
 
-- [ ] **Step 2: Implement `contacts/finder.py`**
+- [x] **Step 2: Implement `contacts/finder.py`**
 
 ```python
 from db.models.contact import Contact
@@ -2330,13 +2330,13 @@ class ContactFinder:
         return contacts
 ```
 
-- [ ] **Step 3: Run tests — all must pass**
+- [x] **Step 3: Run tests — all must pass**
 
 ```bash
 pytest tests/unit/test_contact_finder.py -v
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add contacts/finder.py

@@ -4,6 +4,14 @@ Updated after every passing test and every completed module. Struggled concepts 
 
 ---
 
+## Known Tech Debt
+
+| Item | Notes |
+|---|---|
+| `LinkedInJobSearcher` uses `api_token` internally instead of injected client | Should match `ContactFinder` DI pattern; tests need `patch` removed and `MagicMock()` passed directly |
+
+---
+
 ## Legend
 
 | Status | Meaning |
@@ -147,5 +155,17 @@ Updated after every passing test and every completed module. Struggled concepts 
 | `breakpoint()` left in code | 🔴 Recurring habit | Third occurrence — must scan for debug statements before every review |
 | List comprehension for filtering | 🟢 Solid | Chose it independently and used correct condition |
 | Parameter naming (plural vs keyword match) | 🟡 Needed a nudge | `contact` vs `contacts` and `is_veteran` vs `searcher_is_veteran` — caught on signature review |
+
+## 2026-04-26 — Module: ContactFinder (Task 16)
+
+| Concept | Status | Notes |
+|---|---|---|
+| Dependency injection — where clients come from | 🔴 Struggled | Multiple rounds needed; kept thinking `find` should instantiate or call `.actor()`; needed direct explanation that the injected client is just called |
+| External API returns raw dicts, not models | 🔴 Struggled | Initially said `find_people` returns `Contact` objects; needed several questions to land on raw dicts |
+| `or` fallback pattern (`enrich(...) or raw_people`) | 🔴 Struggled | Needed direct explanation of how Python `or` evaluates falsy empty list |
+| Module-level constants vs class-level | 🟡 Needed a nudge | Good instinct to use a dict mapping; thought it belonged inside the class; one question on `self` dependency resolved it |
+| Helper functions at module level | 🟢 Solid | Correctly identified need for `_infer_category` and `_is_veteran_profile` as separate helpers |
+| Company filter inside loop (`continue` pattern) | 🟢 Solid | Implemented correctly first try |
+| `category_counts` dict for max-per-category guard | 🟢 Solid | Understood the pattern and applied it cleanly |
 
 <!-- Add new entries below as we progress through the build -->
