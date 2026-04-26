@@ -2455,7 +2455,7 @@ git commit -m "feat: implement MessageGenerator with category-specific prompts"
 pytest tests/unit/test_repositories.py -v
 ```
 
-- [ ] **Step 2: Implement `db/connection.py`**
+- [x] **Step 2: Implement `db/connection.py`**
 
 ```python
 import asyncpg

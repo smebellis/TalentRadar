@@ -1,3 +1,5 @@
+from asyncpg import Pool
+
 from db.models.job import Job
 
 INSERT_JOB = """
@@ -10,7 +12,7 @@ SELECT_ALL_JOBS = "SELECT * FROM jobs ORDER BY posted_at DESC"
 
 
 class JobRepository:
-    def __init__(self, pool) -> None:
+    def __init__(self, pool: Pool) -> None:
         self.pool = pool
 
     async def save(self, job: Job) -> None:

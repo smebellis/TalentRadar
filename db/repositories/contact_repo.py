@@ -1,5 +1,7 @@
 from uuid import UUID
 
+from asyncpg import Pool
+
 from db.models.contact import Contact
 from db.models.job import Job
 
@@ -13,7 +15,7 @@ SELECT_ALL_JOBS = "SELECT * FROM contacts ORDER BY relevance_score DESC"
 
 
 class ContactRepository:
-    def __init__(self, pool) -> None:
+    def __init__(self, pool: Pool) -> None:
         self.pool = pool
 
     async def save(self, contact: Contact, job_id: UUID) -> None:
