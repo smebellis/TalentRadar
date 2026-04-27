@@ -2767,7 +2767,7 @@ pytest tests/unit/ -v --tb=short
 
 Expected: all green.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add pipeline/orchestrator.py
@@ -2781,7 +2781,7 @@ git commit -m "feat: implement pipeline Orchestrator with async search and state
 **Files:**
 - Write: `cli.py`, `scheduler.py`
 
-- [ ] **Step 1: Implement `cli.py`**
+- [x] **Step 1: Implement `cli.py`**
 
 ```python
 import asyncio
@@ -2898,7 +2898,7 @@ if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Step 2: Implement `scheduler.py`**
+- [x] **Step 2: Implement `scheduler.py`**
 
 ```python
 import asyncio
@@ -2918,7 +2918,7 @@ def run_on_schedule(interval_seconds: int, cv_path: str, keywords: list[str], cf
         time.sleep(interval_seconds)
 ```
 
-- [ ] **Step 3: Run the full unit test suite one final time**
+- [x] **Step 3: Run the full unit test suite one final time**
 
 ```bash
 pytest tests/unit/ -v --tb=short
@@ -2939,7 +2939,7 @@ git commit -m "feat: implement CLI entry point and scheduler"
 **Files:**
 - Write: `tests/integration/test_pipeline.py`
 
-- [ ] **Step 1: Write integration test skeleton**
+- [x] **Step 1: Write integration test skeleton**
 
 ```python
 """
@@ -2982,13 +2982,13 @@ git commit -m "test: add integration test skeleton (manual run only)"
 
 ## Final Verification
 
-- [ ] **Run full test suite and confirm all unit tests pass**
+- [x] **Run full test suite and confirm all unit tests pass**
 
 ```bash
 pytest tests/unit/ -v --cov=. --cov-report=term-missing --ignore=tests/integration
 ```
 
-- [ ] **Confirm project structure is correct**
+- [x] **Confirm project structure is correct**
 
 ```bash
 find . -name "*.py" | grep -v __pycache__ | sort

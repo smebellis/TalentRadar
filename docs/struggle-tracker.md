@@ -199,4 +199,13 @@ Updated after every passing test and every completed module. Struggled concepts 
 | `Optional[ResumeProfile]` / `Optional[SearchFilters]` on dataclass | 🟡 Needed a nudge | Used `Optional[Type]` (wrong — means a class) instead of the actual model types |
 | Cleaning up unused imports | 🟢 Solid | Identified and removed all unused imports when asked |
 
+## 2026-04-27 — Module: CLI and Scheduler (Task 21)
+
+| Concept | Status | Notes |
+|---|---|---|
+| Why `build_orchestrator` is a helper function | 🔴 Struggled | Couldn't explain it initially; needed analogy about multiple modes growing `main()` into a tangle |
+| `argparse` vs Hydra separation of concerns | 🟡 Needed a nudge | Said "keep concerns separate" correctly but needed the runtime vs static framing to cement it |
+| Unused imports (`os`, `OmegaConf`) | 🟢 Solid | Caught both when asked, no hints needed |
+| Moving import from function body to module level | 🟢 Solid | Understood and fixed without prompting after being asked why it was inside the function |
+
 <!-- Add new entries below as we progress through the build -->
