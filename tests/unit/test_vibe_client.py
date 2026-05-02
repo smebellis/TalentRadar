@@ -1,3 +1,4 @@
+import os
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -62,7 +63,9 @@ def test_find_people_maps_response_correctly():
 
 
 def test_find_people_returns_empty_when_base_url_unset():
-    client = VibeProspectingClient(api_key="test-key", base_url=None)
+    with patch.dict(os.environ, {}, clear=False):
+        os.environ.pop("VIBE_API_BASE_URL", None)
+        client = VibeProspectingClient(api_key="test-key", base_url=None)
     result = client.find_people("Acme Corp", "Engineer")
     assert result == []
 
