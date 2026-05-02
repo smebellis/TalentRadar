@@ -92,3 +92,22 @@ async def test_contacts_table_add_contact_appends_row():
 
         dt = app.query_one("#contacts-dt", DataTable)
         assert dt.row_count == 1
+
+
+@pytest.mark.asyncio
+async def test_messages_panel_add_message_writes_to_log():
+    from ui.widgets.messages_panel import MessagesPanel
+    from textual.app import App, ComposeResult
+    from textual.widgets import RichLog
+
+    class TestApp(App):
+        def compose(self) -> ComposeResult:
+            yield MessagesPanel(id="messages")
+
+    app = TestApp()
+    async with app.run_test(size=(120, 20)) as pilot:
+        panel = app.query_one(MessagesPanel)
+        panel.add_message("Hi Jane, I saw your role at Acme Corp...")
+        await pilot.pause()
+        log = app.query_one("#messages-log", RichLog)
+        assert log is not None
