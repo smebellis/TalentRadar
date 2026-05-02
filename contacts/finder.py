@@ -2,6 +2,19 @@ from db.models.contact import Contact
 from db.models.job import Job
 
 
+class _NoopApifyClient:
+    def find_people(self, company: str, job_title: str) -> list[dict]:
+        return []
+
+
+class _NoopVibeClient:
+    def find_people(self, company: str, job_title: str) -> list[dict]:
+        return []
+
+    def enrich(self, people: list[dict]) -> list[dict]:
+        return people
+
+
 CATEGORY_TITLE_SIGNALS = {
     "recruiter": ["recruiter", "talent acquisition", "talent partner", "sourcer"],
     "hiring_manager": [
@@ -50,19 +63,19 @@ def _is_veteran_profile(title: str, notes: str = "") -> bool:
 
 class ContactFinder:
     def __init__(self, apify_client, vibe_client, max_per_category: int) -> None:
-        self.apify_client = apify_client
-        self.vibe_client = vibe_client
+        self.apify_client = apify_client or _NoopApifyClient()
+        self.vibe_client = vibe_client or _NoopVibeClient()
         self.max_per_category = max_per_category
 
     def find(self, job: Job):
-        raw_people = self.apify_client.find_people(
-            company=job.company, job_title=job.title
+        raw_people = (
+            self.vibe_client.find_people(company=job.company, job_title=job.title)
+            or []
         )
-        enriched = self.vibe_client.enrich(raw_people) or raw_people
         contacts: list[Contact] = []
         category_counts: dict[str, int] = {}
 
-        for person in enriched:
+        for person in raw_people:
             if person.get("company", "").lower() != job.company.lower():
                 continue
             category = _infer_category(person.get("title", ""))
