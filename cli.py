@@ -3,10 +3,11 @@ import asyncio
 
 from hydra import compose, initialize
 
+from contacts.clients import ApifyContactClient, VibeProspectingClient
 from contacts.finder import ContactFinder
 from cv.loader import CVLoader
 from cv.parser import CVParser
-from db.connection import create_pool
+from db.connection import create_pool, ensure_schema
 from db.repositories.contact_repo import ContactRepository
 from db.repositories.job_repo import JobRepository
 from llm.claude import ClaudeClient
@@ -19,13 +20,15 @@ from search.filters import SearchFilters
 from search.google import GoogleJobSearcher
 from search.linkedin import LinkedInJobSearcher
 from ui.renderer import UIRenderer
-from utils.logger import get_logger
+from utils.logger import configure_logging, get_logger
 
 logger = get_logger(__name__)
 
 
 def build_orchestrator(cfg) -> Orchestrator:
     llm = ClaudeClient(api_key=cfg.anthropic_api_key)
+    apify_contacts = ApifyContactClient(api_token=cfg.apify_api_token)
+    vibe_client = VibeProspectingClient(api_key=cfg.vibe_api_key, base_url=cfg.vibe_api_base_url)
     return Orchestrator(
         cv_loader=CVLoader(),
         cv_parser=CVParser(llm=llm),
@@ -34,8 +37,8 @@ def build_orchestrator(cfg) -> Orchestrator:
         combiner=combine_jobs,
         job_scorer=JobScorer(llm=llm),
         contact_finder=ContactFinder(
-            apify_client=None,
-            vibe_client=None,
+            apify_client=apify_contacts,
+            vibe_client=vibe_client,
             max_per_category=cfg.scoring.max_contacts_per_category,
         ),
         contact_scorer=ContactScorer(
@@ -53,6 +56,10 @@ def build_orchestrator(cfg) -> Orchestrator:
 
 
 async def run_full(cfg, cv_path: str, keywords: list[str]):
+    try:
+        configure_logging(level=cfg.logging.level)
+    except Exception:
+        configure_logging()
     pool = await create_pool(
         host=cfg.database.host,
         port=int(cfg.database.port),
@@ -60,7 +67,10 @@ async def run_full(cfg, cv_path: str, keywords: list[str]):
         user=cfg.database.user,
         password=cfg.database.password,
     )
+    await ensure_schema(pool)
     llm = ClaudeClient(api_key=cfg.anthropic_api_key)
+    apify_contacts = ApifyContactClient(api_token=cfg.apify_api_token)
+    vibe_client = VibeProspectingClient(api_key=cfg.vibe_api_key, base_url=cfg.vibe_api_base_url)
     orch = Orchestrator(
         cv_loader=CVLoader(),
         cv_parser=CVParser(llm=llm),
@@ -69,8 +79,8 @@ async def run_full(cfg, cv_path: str, keywords: list[str]):
         combiner=combine_jobs,
         job_scorer=JobScorer(llm=llm),
         contact_finder=ContactFinder(
-            apify_client=None,
-            vibe_client=None,
+            apify_client=apify_contacts,
+            vibe_client=vibe_client,
             max_per_category=cfg.scoring.max_contacts_per_category,
         ),
         contact_scorer=ContactScorer(
@@ -97,9 +107,11 @@ async def run_full(cfg, cv_path: str, keywords: list[str]):
     await pool.close()
     if ctx.errors:
         for err in ctx.errors:
-            logger.error("Pipeline error: %s", err)
+            logger.error(err)
     else:
         logger.info("Pipeline complete. State: %s", ctx.state)
+        if ctx.output:
+            print(ctx.output)
 
 
 def main():
