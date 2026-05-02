@@ -26,36 +26,6 @@ from utils.logger import configure_logging, get_logger
 logger = get_logger(__name__)
 
 
-def build_orchestrator(cfg) -> Orchestrator:
-    llm = ClaudeClient(api_key=cfg.anthropic_api_key)
-    apify_contacts = ApifyContactClient(api_token=cfg.apify_api_token)
-    vibe_client = VibeProspectingClient(api_key=cfg.vibe_api_key, base_url=cfg.vibe_api_base_url)
-    return Orchestrator(
-        cv_loader=CVLoader(),
-        cv_parser=CVParser(llm=llm),
-        google_searcher=GoogleJobSearcher(llm=llm),
-        linkedin_searcher=LinkedInJobSearcher(api_token=cfg.apify_api_token),
-        combiner=combine_jobs,
-        job_scorer=JobScorer(llm=llm),
-        contact_finder=ContactFinder(
-            apify_client=apify_contacts,
-            vibe_client=vibe_client,
-            max_per_category=cfg.scoring.max_contacts_per_category,
-        ),
-        contact_scorer=ContactScorer(
-            threshold=cfg.scoring.contact_score_threshold,
-            veteran_boost=cfg.scoring.veteran_score_boost,
-        ),
-        message_generator=MessageGenerator(llm=llm),
-        job_repo=None,
-        contact_repo=None,
-        renderer=UIRenderer(),
-        job_threshold=cfg.scoring.job_score_threshold,
-        contact_threshold=cfg.scoring.contact_score_threshold,
-        top_n=cfg.scoring.top_n_jobs,
-    )
-
-
 async def run_full(cfg, cv_path: str, keywords: list[str]):
     try:
         configure_logging(level=cfg.logging.level)

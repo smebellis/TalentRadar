@@ -34,7 +34,6 @@ VETERAN_SIGNALS = [
     "navy",
     "marines",
     "air force",
-    "navy",
     "coast guard",
     "space force",
     "military",
