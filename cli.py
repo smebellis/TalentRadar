@@ -4,6 +4,7 @@ import asyncio
 from hydra import compose, initialize
 
 from contacts.clients import ApifyContactClient, VibeProspectingClient
+from ui.tui import JobSearchApp
 from contacts.finder import ContactFinder
 from cv.loader import CVLoader
 from cv.parser import CVParser
@@ -127,7 +128,8 @@ def main():
         cfg = compose(config_name="config")
 
     if args.mode == "full":
-        asyncio.run(run_full(cfg, cv_path=args.cv, keywords=args.keywords))
+        app = JobSearchApp(cfg=cfg, cv_path=args.cv, keywords=args.keywords)
+        app.run()
     else:
         logger.info(f"Mode '{args.mode}' not yet implemented — use 'full'")
 
