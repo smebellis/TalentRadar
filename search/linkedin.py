@@ -8,14 +8,17 @@ from search.filters import SearchFilters
 
 class LinkedInJobSearcher:
     def __init__(self, api_token: str) -> None:
-        self.apify_client = ApifyClient(api_token=api_token)
+        self.apify_client = ApifyClient(api_token)
 
     def search(self, filters: SearchFilters) -> list:
+        keywords = "%20".join(filters.keywords)
+        location = filters.location.replace(", ", "%2C%20").replace(" ", "%20")
+        search_url = f"https://www.linkedin.com/jobs/search/?keywords={keywords}&location={location}"
         actor_client = self.apify_client.actor("curious_coder/linkedin-jobs-scraper")
         run = actor_client.call(
             run_input={
-                "keywords": filters.keywords,
-                "location": filters.location,
+                "urls": [search_url],
+                "count": 50,
             }
         )
         dataset_id = run["defaultDatasetId"]

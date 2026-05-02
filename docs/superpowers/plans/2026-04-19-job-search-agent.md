@@ -2925,7 +2925,7 @@ pytest tests/unit/ -v --tb=short
 ```
 Expected: all green.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add cli.py scheduler.py
@@ -2971,7 +2971,7 @@ def test_linkedin_search_returns_jobs():
     pytest.skip("Run manually: requires APIFY_API_TOKEN")
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add tests/integration/test_pipeline.py
@@ -2994,7 +2994,7 @@ pytest tests/unit/ -v --cov=. --cov-report=term-missing --ignore=tests/integrati
 find . -name "*.py" | grep -v __pycache__ | sort
 ```
 
-- [ ] **Tag the working baseline**
+- [x] **Tag the working baseline**
 
 ```bash
 git tag v0.1.0-foundation

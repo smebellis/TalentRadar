@@ -93,8 +93,13 @@ async def run_full(cfg, cv_path: str, keywords: list[str]):
         job_type=cfg.search.job_type,
         time_window_hours=cfg.search.time_window_hours,
     )
-    await orch.run(cv_path=cv_path, filters=filters)
+    ctx = await orch.run(cv_path=cv_path, filters=filters)
     await pool.close()
+    if ctx.errors:
+        for err in ctx.errors:
+            logger.error("Pipeline error: %s", err)
+    else:
+        logger.info("Pipeline complete. State: %s", ctx.state)
 
 
 def main():

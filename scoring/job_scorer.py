@@ -20,7 +20,12 @@ class JobScorer:
             )
             user = f"Job: {job_params}\nResume: {resume_params}"
             response = self.llm.complete(system=SYSTEM_PROMPT, user=str(user))
-            data = json.loads(response)
+            response = response.strip()
+            if response.startswith("```"):
+                response = response.split("\n", 1)[1]
+            if response.endswith("```"):
+                response = response.rsplit("```", 1)[0]
+            data = json.loads(response.strip())
             job.fit_score = data["score"]
             job_to_sort.append(job)
         sorted_jobs = sorted(job_to_sort, key=lambda c: c.fit_score, reverse=True)

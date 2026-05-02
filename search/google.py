@@ -15,7 +15,12 @@ class GoogleJobSearcher:
     def search(self, filters: SearchFilters) -> list:
         filter_string = filters.model_dump_json()
         response = self.llm.complete(system=SYSTEM_PROMPT, user=filter_string)
-        data = json.loads(response)
+        response = response.strip()
+        if response.startswith("```"):
+            response = response.split("\n", 1)[1]
+        if response.endswith("```"):
+            response = response.rsplit("```", 1)[0]
+        data = json.loads(response.strip())
         filtered_jobs = []
         for item in data:
             job = Job(
