@@ -1,4 +1,3 @@
-import json
 from pathlib import Path
 
 from textual.app import App, ComposeResult
@@ -16,7 +15,7 @@ class JobSearchApp(App):
     Screen {
         layout: grid;
         grid-size: 2;
-        grid-rows: 5 1fr 1fr;
+        grid-rows: 5 1fr 1fr 1;
     }
     ProgressPanel {
         column-span: 2;
@@ -111,55 +110,62 @@ class JobSearchApp(App):
         except Exception:
             configure_logging()
 
-        pool = await create_pool(
-            host=cfg.database.host,
-            port=int(cfg.database.port),
-            db=cfg.database.db,
-            user=cfg.database.user,
-            password=cfg.database.password,
-        )
-        await ensure_schema(pool)
+        pool = None
+        try:
+            pool = await create_pool(
+                host=cfg.database.host,
+                port=int(cfg.database.port),
+                db=cfg.database.db,
+                user=cfg.database.user,
+                password=cfg.database.password,
+            )
+            await ensure_schema(pool)
 
-        llm = ClaudeClient(api_key=cfg.anthropic_api_key)
-        apify_contacts = ApifyContactClient(api_token=cfg.apify_api_token)
-        vibe_client = VibeProspectingClient(
-            api_key=cfg.vibe_api_key, base_url=cfg.vibe_api_base_url
-        )
-        orch = Orchestrator(
-            cv_loader=CVLoader(),
-            cv_parser=CVParser(llm=llm),
-            google_searcher=GoogleJobSearcher(llm=llm),
-            linkedin_searcher=LinkedInJobSearcher(api_token=cfg.apify_api_token),
-            combiner=combine_jobs,
-            job_scorer=JobScorer(llm=llm),
-            contact_finder=ContactFinder(
-                apify_client=apify_contacts,
-                vibe_client=vibe_client,
-                max_per_category=cfg.scoring.max_contacts_per_category,
-            ),
-            contact_scorer=ContactScorer(
-                threshold=cfg.scoring.contact_score_threshold,
-                veteran_boost=cfg.scoring.veteran_score_boost,
-            ),
-            message_generator=MessageGenerator(llm=llm),
-            job_repo=JobRepository(pool=pool),
-            contact_repo=ContactRepository(pool=pool),
-            renderer=UIRenderer(),
-            job_threshold=cfg.scoring.job_score_threshold,
-            contact_threshold=cfg.scoring.contact_score_threshold,
-            top_n=cfg.scoring.top_n_jobs,
-            progress_callback=self._progress_callback,
-        )
-        filters = SearchFilters(
-            keywords=self._keywords or cfg.search.keywords,
-            location=cfg.search.location,
-            remote=cfg.search.remote,
-            onsite=cfg.search.onsite,
-            job_type=cfg.search.job_type,
-            time_window_hours=cfg.search.time_window_hours,
-        )
-        ctx = await orch.run(cv_path=self._cv_path, filters=filters)
-        await pool.close()
+            llm = ClaudeClient(api_key=cfg.anthropic_api_key)
+            apify_contacts = ApifyContactClient(api_token=cfg.apify_api_token)
+            vibe_client = VibeProspectingClient(
+                api_key=cfg.vibe_api_key, base_url=cfg.vibe_api_base_url
+            )
+            orch = Orchestrator(
+                cv_loader=CVLoader(),
+                cv_parser=CVParser(llm=llm),
+                google_searcher=GoogleJobSearcher(llm=llm),
+                linkedin_searcher=LinkedInJobSearcher(api_token=cfg.apify_api_token),
+                combiner=combine_jobs,
+                job_scorer=JobScorer(llm=llm),
+                contact_finder=ContactFinder(
+                    apify_client=apify_contacts,
+                    vibe_client=vibe_client,
+                    max_per_category=cfg.scoring.max_contacts_per_category,
+                ),
+                contact_scorer=ContactScorer(
+                    threshold=cfg.scoring.contact_score_threshold,
+                    veteran_boost=cfg.scoring.veteran_score_boost,
+                ),
+                message_generator=MessageGenerator(llm=llm),
+                job_repo=JobRepository(pool=pool),
+                contact_repo=ContactRepository(pool=pool),
+                renderer=UIRenderer(),
+                job_threshold=cfg.scoring.job_score_threshold,
+                contact_threshold=cfg.scoring.contact_score_threshold,
+                top_n=cfg.scoring.top_n_jobs,
+                progress_callback=self._progress_callback,
+            )
+            filters = SearchFilters(
+                keywords=self._keywords or cfg.search.keywords,
+                location=cfg.search.location,
+                remote=cfg.search.remote,
+                onsite=cfg.search.onsite,
+                job_type=cfg.search.job_type,
+                time_window_hours=cfg.search.time_window_hours,
+            )
+            ctx = await orch.run(cv_path=self._cv_path, filters=filters)
 
-        if ctx.output:
-            Path("output.json").write_text(ctx.output)
+            if ctx.output:
+                Path("output.json").write_text(ctx.output)
+
+        except Exception as exc:
+            self.query_one(ProgressPanel).set_error(str(exc))
+        finally:
+            if pool:
+                await pool.close()
