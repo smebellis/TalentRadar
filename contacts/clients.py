@@ -152,6 +152,9 @@ class VibeProspectingClient:
             return []
 
         logger.debug("VibeProspectingClient raw response keys: %s", list(data.keys()))
+        with open("/app/output/vibe_debug.txt", "w") as f:
+            f.write(f"response keys: {list(data.keys())}\n")
+            f.write(f"response: {str(data)[:2000]}\n")
         raw_people = (
             (data.get("preview") or {}).get("preview_data")
             or data.get("prospects")
