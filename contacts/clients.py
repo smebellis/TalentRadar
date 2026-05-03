@@ -161,18 +161,24 @@ class VibeProspectingClient:
         )
         logger.info("VibeProspectingClient: %d raw people for %r", len(raw_people), company)
 
+        if raw_people:
+            print(f"[VIBE DEBUG] sample prospect keys: {list(raw_people[0].keys())}", flush=True)
+            print(f"[VIBE DEBUG] sample prospect: {raw_people[0]}", flush=True)
+
         prospects: list[dict] = []
         for p in raw_people:
-            linkedin = p.get("prospect_linkedin") or ""
+            name = p.get("prospect_full_name") or p.get("full_name") or ""
+            title = p.get("prospect_job_title") or p.get("job_title") or ""
+            linkedin = p.get("prospect_linkedin") or p.get("linkedin") or ""
             if linkedin and not linkedin.startswith("http"):
                 linkedin = "https://" + linkedin
-            city = p.get("prospect_city") or ""
-            region = p.get("prospect_region_name") or ""
+            city = p.get("prospect_city") or p.get("city") or ""
+            region = p.get("prospect_region_name") or p.get("region_name") or ""
             notes = ", ".join(filter(None, [city, region]))[:100]
             prospects.append(
                 {
-                    "name": p.get("prospect_full_name") or "",
-                    "title": p.get("prospect_job_title") or "",
+                    "name": name,
+                    "title": title,
                     "company": company,
                     "linkedin_url": linkedin,
                     "email": None,
