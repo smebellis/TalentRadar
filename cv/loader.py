@@ -5,7 +5,7 @@ import fitz
 
 class CVLoader:
     def load(self, resume: str) -> LiteralString:
-        doc = fitz.open(resume, filetype="txt")
+        doc = fitz.open(resume)
         text = "\n".join([page.get_text() for page in doc])
 
         return text

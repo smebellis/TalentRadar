@@ -12,7 +12,16 @@ class CVParser:
 
     def parse(self, resume_text: str) -> ResumeProfile:
         response = self.llm.complete(system=SYSTEM_PROMPT, user=resume_text)
+        # Strip markdown code fences if present
+        response = response.strip()
+        if response.startswith("```"):
+            response = response.split("\n", 1)[1]
+        if response.endswith("```"):
+            response = response.rsplit("```", 1)[0]
+        response = response.strip()
         data = json.loads(response)
+        if isinstance(data, list):
+            data = data[0]
 
         resume = ResumeProfile(
             skills=data["skills"],

@@ -1,5 +1,6 @@
-job_score_threshold: 7.0
-contact_score_threshold: 7.0
-top_n_jobs: 10
-max_contacts_per_category: 8
-veteran_score_boost: 1.5
+scoring:
+  job_score_threshold: 7.0
+  contact_score_threshold: 7.0
+  top_n_jobs: 10
+  max_contacts_per_category: 8
+  veteran_score_boost: 1.5

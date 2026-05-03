@@ -1,7 +1,8 @@
-host: ${oc.env:POSTGRES_HOST,localhost}
-port: ${oc.env:POSTGRES_PORT,5432}
-db: ${oc.env:POSTGRES_DB,job_search}
-user: ${oc.env:POSTGRES_USER}
-password: ${oc.env:POSTGRES_PASSWORD}
-min_pool_size: 2
-max_pool_size: 10
+database:
+  host: ${oc.env:POSTGRES_HOST,localhost}
+  port: ${oc.env:POSTGRES_PORT,5432}
+  db: ${oc.env:POSTGRES_DB,job_search}
+  user: ${oc.env:POSTGRES_USER}
+  password: ${oc.env:POSTGRES_PASSWORD}
+  min_pool_size: 2
+  max_pool_size: 10

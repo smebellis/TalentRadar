@@ -29,6 +29,45 @@ uv sync
 cp .env.example .env
 ```
 
+## Docker
+
+The app and PostgreSQL database can be run entirely in Docker — no local Python or Postgres install required.
+
+### Prerequisites
+
+- Docker + Docker Compose v2
+
+> **WSL2 users:** Docker daemon doesn't auto-start. Run `sudo dockerd > /tmp/dockerd.log 2>&1 &` before any `docker` command.
+
+### Setup
+
+```bash
+cp .env.example .env
+# Edit .env — set POSTGRES_HOST=db, real Postgres credentials, RESUME_DIR, and API keys
+```
+
+### Start the database
+
+```bash
+docker compose up db -d
+```
+
+### Run the pipeline
+
+```bash
+docker compose run --rm app python cli.py full --cv /data/resume.pdf --keywords "Python" "Data Engineering"
+```
+
+Resume PDFs are served from the directory you set as `RESUME_DIR` in `.env`, mounted at `/data` inside the container.
+
+### Stop
+
+```bash
+docker compose down
+```
+
+---
+
 ## Usage
 
 ```bash
