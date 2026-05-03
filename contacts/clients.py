@@ -86,7 +86,7 @@ class VibeProspectingClient:
             with httpx.Client(timeout=20.0) as client:
                 response = client.post(
                     f"{self.base_url.rstrip('/')}/enrich",
-                    headers={"Authorization": f"Bearer {self.api_key}"},
+                    headers={"api_key": self.api_key},
                     json={"people": people},
                 )
                 response.raise_for_status()
@@ -103,7 +103,7 @@ class VibeProspectingClient:
             return []
 
         headers = {
-            "Authorization": f"Bearer {self.api_key}",
+            "api_key": self.api_key,
             "Content-Type": "application/json",
         }
         base = self.base_url.rstrip("/")
@@ -114,7 +114,7 @@ class VibeProspectingClient:
                 match_resp = client.post(
                     f"{base}/businesses/match",
                     headers=headers,
-                    json={"businesses": [{"name": company}]},
+                    json={"businesses_to_match": [{"name": company}]},
                 )
                 if match_resp.status_code == 402:
                     logger.warning("VibeProspectingClient: credits exhausted (match)")
@@ -133,11 +133,12 @@ class VibeProspectingClient:
 
                 # Step 2: fetch prospects for that business
                 fetch_resp = client.post(
-                    f"{base}/prospects/fetch",
+                    f"{base}/prospects",
                     headers=headers,
                     json={
+                        "mode": "preview",
                         "filters": {"business_id": {"values": [business_id]}},
-                        "number_of_results": max_results,
+                        "page_size": max_results,
                     },
                 )
                 if fetch_resp.status_code == 402:
@@ -162,16 +163,16 @@ class VibeProspectingClient:
 
         prospects: list[dict] = []
         for p in raw_people:
-            linkedin = p.get("prospect_linkedin") or ""
+            linkedin = p.get("linkedin") or ""
             if linkedin and not linkedin.startswith("http"):
                 linkedin = "https://" + linkedin
-            city = p.get("prospect_city") or ""
-            region = p.get("prospect_region_name") or ""
+            city = p.get("city") or ""
+            region = p.get("region_name") or ""
             notes = ", ".join(filter(None, [city, region]))[:100]
             prospects.append(
                 {
-                    "name": p.get("prospect_full_name") or "",
-                    "title": p.get("prospect_job_title") or "",
+                    "name": p.get("full_name") or "",
+                    "title": p.get("job_title") or "",
                     "company": company,
                     "linkedin_url": linkedin,
                     "email": None,

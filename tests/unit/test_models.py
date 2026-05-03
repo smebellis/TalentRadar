@@ -137,12 +137,13 @@ def test_message_calculates_character_count():
     assert msg.character_count == len("Hello, this is a test message.")
 
 
-def test_message_rejects_text_over_300_chars():
+def test_message_truncates_text_over_300_chars():
     from uuid import uuid4
 
-    with pytest.raises(ValidationError):
-        Message(
-            contact_id=uuid4(),
-            job_id=uuid4(),
-            message_text="x" * 301,
-        )
+    msg = Message(
+        contact_id=uuid4(),
+        job_id=uuid4(),
+        message_text="x" * 301,
+    )
+    assert len(msg.message_text) <= 300
+    assert msg.character_count <= 300

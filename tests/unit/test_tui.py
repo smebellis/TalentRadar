@@ -107,7 +107,10 @@ async def test_messages_panel_add_message_writes_to_log():
     app = TestApp()
     async with app.run_test(size=(120, 20)) as pilot:
         panel = app.query_one(MessagesPanel)
-        panel.add_message("Hi Jane, I saw your role at Acme Corp...")
+        from db.models.message import Message
+        import uuid
+        msg = Message(contact_id=uuid.uuid4(), job_id=uuid.uuid4(), message_text="Hi Jane, I saw your role at Acme Corp...")
+        panel.add_message(msg)
         await pilot.pause()
         log = app.query_one("#messages-log", RichLog)
         assert log is not None

@@ -8,6 +8,7 @@ from cv.loader import CVLoader
 from cv.parser import CVParser
 from db.repositories.contact_repo import ContactRepository
 from db.repositories.job_repo import JobRepository
+from db.repositories.message_repo import MessageRepository
 from messaging.generator import MessageGenerator
 from pipeline.state import PipelineContext, PipelineState
 from scoring.contact_scorer import ContactScorer
@@ -36,6 +37,7 @@ class Orchestrator:
         message_generator,
         job_repo,
         contact_repo,
+        message_repo,
         renderer,
         job_threshold: float,
         contact_threshold: float,
@@ -53,6 +55,7 @@ class Orchestrator:
         self._msg_gen = message_generator
         self._job_repo = job_repo
         self._contact_repo = contact_repo
+        self._message_repo = message_repo
         self._renderer = renderer
         self._job_threshold = job_threshold
         self._contact_threshold = contact_threshold
@@ -118,7 +121,10 @@ class Orchestrator:
             ctx.state = PipelineState.GENERATE_MESSAGES
             print(f"[6/7] Generating messages for {len(ctx.contacts)} contacts...", flush=True)
             ctx.messages = [
-                self._msg_gen.generate(c, j) for c in ctx.contacts for j in top_jobs[:1]
+                msg
+                for c in ctx.contacts
+                for j in top_jobs[:1]
+                if (msg := self._msg_gen.generate(c, j)) is not None
             ]
             self._fire("generating_messages", {"messages": ctx.messages})
 
@@ -127,6 +133,9 @@ class Orchestrator:
                     contact,
                     top_jobs[0].id if top_jobs else None,
                 )
+
+            for message in ctx.messages:
+                await self._message_repo.save(message)
 
             print("[7/7] Rendering output...", flush=True)
             ctx.output = self._renderer.render(
@@ -138,9 +147,12 @@ class Orchestrator:
             self._fire("complete", {})
 
         except Exception as exc:
+            tb = traceback.format_exc()
             ctx.errors.append(str(exc))
-            ctx.errors.append(traceback.format_exc())
+            ctx.errors.append(tb)
             ctx.state = PipelineState.ERROR
+            with open("pipeline_error.log", "w") as f:
+                f.write(tb)
             self._fire("error", {"message": str(exc)})
 
         return ctx

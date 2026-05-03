@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS contacts (
     id UUID PRIMARY KEY,
     job_id UUID REFERENCES jobs(id) ON DELETE SET NULL,
     name TEXT NOT NULL,
+    title TEXT NOT NULL,
     company TEXT NOT NULL,
     category TEXT NOT NULL,
     linkedin_url TEXT NOT NULL,
@@ -25,6 +26,16 @@ CREATE TABLE IF NOT EXISTS contacts (
     relevance_score DOUBLE PRECISION NOT NULL,
     is_veteran BOOLEAN NOT NULL DEFAULT FALSE,
     notes TEXT NOT NULL
+)
+"""
+
+CREATE_MESSAGES_TABLE = """
+CREATE TABLE IF NOT EXISTS messages (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    contact_id UUID REFERENCES contacts(id) ON DELETE CASCADE,
+    job_id UUID REFERENCES jobs(id) ON DELETE CASCADE,
+    message_text TEXT NOT NULL,
+    character_count INT NOT NULL
 )
 """
 
@@ -53,3 +64,4 @@ async def ensure_schema(pool: asyncpg.Pool) -> None:
     async with pool.acquire() as conn:
         await conn.execute(CREATE_JOBS_TABLE)
         await conn.execute(CREATE_CONTACTS_TABLE)
+        await conn.execute(CREATE_MESSAGES_TABLE)

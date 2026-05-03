@@ -6,8 +6,8 @@ from db.models.contact import Contact
 from db.models.job import Job
 
 INSERT_CONTACT = """
-INSERT INTO contacts (id, job_id, name, company, category, linkedin_url, email, relevance_score, is_veteran, notes)
-VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+INSERT INTO contacts (id, job_id, name, title, company, category, linkedin_url, email, relevance_score, is_veteran, notes)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
 ON CONFLICT (id) DO NOTHING
 """
 
@@ -25,6 +25,7 @@ class ContactRepository:
                 contact.id,
                 job_id,
                 contact.name,
+                contact.title,
                 contact.company,
                 contact.category,
                 contact.linkedin_url,

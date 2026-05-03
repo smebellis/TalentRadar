@@ -4,4 +4,4 @@ search:
   remote: true
   onsite: true
   job_type: "full-time"
-  time_window_hours: 24
+  time_window_hours: 168

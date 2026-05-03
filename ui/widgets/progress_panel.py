@@ -1,3 +1,4 @@
+from rich.markup import escape
 from textual.app import ComposeResult
 from textual.widgets import Label, ProgressBar, Static
 
@@ -10,7 +11,7 @@ class ProgressPanel(Static):
 
     def set_stage(self, n: int, label: str) -> None:
         self.query_one("#progress-bar", ProgressBar).update(progress=n)
-        self.query_one("#progress-label", Label).update(f"[{n}/7] {label}")
+        self.query_one("#progress-label", Label).update(f"Step {n}/7: {escape(label)}")
 
     def set_error(self, message: str) -> None:
-        self.query_one("#progress-label", Label).update(f"[red]Error: {message}[/red]")
+        self.query_one("#progress-label", Label).update(f"[red]Error: {escape(message)}[/red]")

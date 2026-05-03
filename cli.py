@@ -11,6 +11,7 @@ from cv.parser import CVParser
 from db.connection import create_pool, ensure_schema
 from db.repositories.contact_repo import ContactRepository
 from db.repositories.job_repo import JobRepository
+from db.repositories.message_repo import MessageRepository
 from llm.claude import ClaudeClient
 from messaging.generator import MessageGenerator
 from pipeline.combiner import combine_jobs
@@ -61,6 +62,7 @@ async def run_full(cfg, cv_path: str, keywords: list[str]):
         message_generator=MessageGenerator(llm=llm),
         job_repo=JobRepository(pool=pool),
         contact_repo=ContactRepository(pool=pool),
+        message_repo=MessageRepository(pool=pool),
         renderer=UIRenderer(),
         job_threshold=cfg.scoring.job_score_threshold,
         contact_threshold=cfg.scoring.contact_score_threshold,

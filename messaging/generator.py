@@ -63,6 +63,9 @@ class MessageGenerator:
 
         response = self.llm.complete(system=system, user=user)
 
+        if response.strip().upper() == "SKIP":
+            return None
+
         message = Message(
             job_id=job.id,
             contact_id=contact.id,

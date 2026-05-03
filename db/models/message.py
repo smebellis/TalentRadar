@@ -12,8 +12,8 @@ class Message(BaseModel):
 
     @model_validator(mode="after")
     def check_character_count(self) -> Self:
-        character_count = len(self.message_text)
-        self.character_count = character_count
-        if character_count > 300:
-            raise ValueError("Message Count exceeds 300 characters")
+        if len(self.message_text) > 300:
+            truncated = self.message_text[:300].rsplit(" ", 1)[0]
+            self.message_text = truncated
+        self.character_count = len(self.message_text)
         return self
