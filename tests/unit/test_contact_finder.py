@@ -59,11 +59,11 @@ def test_contact_finder_returns_contacts_for_job():
     assert len(result) >= 1
 
 
-def test_contact_finder_only_includes_current_employees():
+def test_contact_finder_sets_company_from_job_not_vibe_response():
     people = [
         {
             "name": "Bob",
-            "title": "Former Manager",
+            "title": "Engineer",
             "linkedin_url": "https://linkedin.com/in/bob",
             "company": "OtherCorp",
             "email": None,
@@ -72,8 +72,58 @@ def test_contact_finder_only_includes_current_employees():
     ]
     finder, _, _ = _make_finder(people)
     result = finder.find(_make_job())
-    for contact in result:
-        assert contact.company == "TechCorp"
+    assert len(result) == 1
+    assert result[0].company == "TechCorp"
+
+
+def _make_person(name, title):
+    return {
+        "name": name,
+        "title": title,
+        "linkedin_url": f"https://linkedin.com/in/{name.lower()}",
+        "company": "TechCorp",
+        "email": None,
+        "notes": "",
+    }
+
+
+def test_contact_finder_skips_executives():
+    executives = [
+        _make_person("Alice", "Chief Executive Officer"),
+        _make_person("Bob", "SVP of Engineering"),
+        _make_person("Carol", "Founder and CTO"),
+        _make_person("Dave", "President"),
+    ]
+    finder, _, _ = _make_finder(executives)
+    result = finder.find(_make_job())
+    assert result == []
+
+
+def test_contact_finder_does_not_skip_non_executives():
+    people = [
+        _make_person("Alice", "Engineering Manager"),
+        _make_person("Bob", "Recruiter"),
+        _make_person("Carol", "Data Scientist"),
+    ]
+    finder, _, _ = _make_finder(people)
+    result = finder.find(_make_job())
+    assert len(result) == 3
+
+
+def test_contact_finder_categorizes_veteran_by_title():
+    people = [_make_person("Dave", "Army Veteran turned Data Engineer")]
+    finder, _, _ = _make_finder(people)
+    result = finder.find(_make_job())
+    assert len(result) == 1
+    assert result[0].category == "veteran"
+    assert result[0].is_veteran is True
+
+
+def test_contact_finder_veteran_takes_priority_over_other_categories():
+    people = [_make_person("Eve", "Military Veteran Recruiter")]
+    finder, _, _ = _make_finder(people)
+    result = finder.find(_make_job())
+    assert result[0].category == "veteran"
 
 
 def test_contact_finder_respects_max_per_category():

@@ -59,6 +59,7 @@ async def test_jobs_table_add_job_appends_row():
         job.company = "Acme Corp"
         job.fit_score = 8.5
         job.source = "linkedin"
+        job.apply_url = "https://example.com/apply"
 
         table = app.query_one(JobsTable)
         table.add_job(job)
@@ -85,6 +86,7 @@ async def test_contacts_table_add_contact_appends_row():
         contact.name = "Jane Smith"
         contact.title = "Engineering Manager"
         contact.company = "Acme Corp"
+        contact.linkedin_url = "https://linkedin.com/in/janesmith"
 
         table = app.query_one(ContactsTable)
         table.add_contact(contact)
