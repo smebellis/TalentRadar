@@ -136,7 +136,6 @@ class VibeProspectingClient:
                     f"{base}/prospects",
                     headers=headers,
                     json={
-                        "mode": "preview",
                         "filters": {"business_id": {"values": [business_id]}},
                         "page_size": max_results,
                     },
