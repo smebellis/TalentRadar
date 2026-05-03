@@ -19,6 +19,13 @@ class _NoopVibeClient:
         return people
 
 
+EXECUTIVE_SIGNALS = [
+    "chief", "ceo", "cto", "cfo", "coo", "ciso", "cpo",
+    "svp", "evp", "executive vice president", "senior vice president",
+    "president", "founder", "co-founder", "partner", "managing director",
+    "general manager",
+]
+
 CATEGORY_TITLE_SIGNALS = {
     "recruiter": ["recruiter", "talent acquisition", "talent partner", "sourcer"],
     "hiring_manager": [
@@ -29,7 +36,6 @@ CATEGORY_TITLE_SIGNALS = {
         "team lead",
         "tech lead",
     ],
-    "peer": [],
 }
 
 VETERAN_SIGNALS = [
@@ -49,6 +55,11 @@ VETERAN_SIGNALS = [
     "mos",
     "afsc",
 ]
+
+
+def _is_executive(title: str) -> bool:
+    title_lower = title.lower()
+    return any(signal in title_lower for signal in EXECUTIVE_SIGNALS)
 
 
 def _infer_category(title: str) -> str:
@@ -80,12 +91,16 @@ class ContactFinder:
         category_counts: dict[str, int] = {}
 
         for person in raw_people:
-            if person.get("company", "").lower() != job.company.lower():
+            title = person.get("title", "")
+
+            if _is_executive(title):
                 continue
-            category = _infer_category(person.get("title", ""))
-            is_vet = _is_veteran_profile(person.get("title", ""))
+
+            is_vet = _is_veteran_profile(title)
             if is_vet:
                 category = "veteran"
+            else:
+                category = _infer_category(title)
 
             if category_counts.get(category, 0) >= self.max_per_category:
                 continue
@@ -93,7 +108,7 @@ class ContactFinder:
             contacts.append(
                 Contact(
                     name=person["name"],
-                    title=person["title"],
+                    title=title,
                     company=job.company,
                     category=category,
                     linkedin_url=person["linkedin_url"],
