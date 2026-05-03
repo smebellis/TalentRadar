@@ -108,6 +108,7 @@ class VibeProspectingClient:
         }
         base = self.base_url.rstrip("/")
 
+        debug_lines = [f"company={company!r}\n"]
         try:
             with httpx.Client(timeout=30.0) as client:
                 # Step 1: resolve company name → business_id
@@ -116,6 +117,8 @@ class VibeProspectingClient:
                     headers=headers,
                     json={"businesses_to_match": [{"name": company}]},
                 )
+                debug_lines.append(f"match status={match_resp.status_code}\n")
+                debug_lines.append(f"match body={match_resp.text[:500]}\n")
                 if match_resp.status_code == 402:
                     logger.warning("VibeProspectingClient: credits exhausted (match)")
                     return []
@@ -148,11 +151,15 @@ class VibeProspectingClient:
         except RuntimeError:
             raise
         except Exception as exc:
+            debug_lines.append(f"exception: {exc}\n")
             logger.warning("VibeProspectingClient.find_people failed: %s", exc, exc_info=True)
             return []
+        finally:
+            with open("/app/output/vibe_debug.txt", "a") as f:
+                f.writelines(debug_lines)
 
         logger.debug("VibeProspectingClient raw response keys: %s", list(data.keys()))
-        with open("/app/output/vibe_debug.txt", "w") as f:
+        with open("/app/output/vibe_debug.txt", "a") as f:
             f.write(f"response keys: {list(data.keys())}\n")
             f.write(f"response: {str(data)[:2000]}\n")
         raw_people = (
