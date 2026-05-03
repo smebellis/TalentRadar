@@ -1,5 +1,9 @@
+import logging
+
 from db.models.contact import Contact
 from db.models.job import Job
+
+logger = logging.getLogger(__name__)
 
 
 class _NoopApifyClient:
@@ -71,6 +75,7 @@ class ContactFinder:
             self.vibe_client.find_people(company=job.company, job_title=job.title)
             or []
         )
+        logger.info("ContactFinder: %d people from Vibe for %r", len(raw_people), job.company)
         contacts: list[Contact] = []
         category_counts: dict[str, int] = {}
 

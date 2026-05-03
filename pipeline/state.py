@@ -29,3 +29,4 @@ class PipelineContext:
     messages: list = field(default_factory=list)
     resume: Optional[ResumeProfile] | None = None
     filters: Optional[SearchFilters] | None = None
+    output: Optional[str] = None

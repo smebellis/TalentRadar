@@ -13,12 +13,16 @@ services:
   app:
     build: .
     env_file: .env
+    environment:
+      - TERM=xterm-256color
     depends_on:
       db:
         condition: service_healthy
     volumes:
       - ${RESUME_DIR}:/data
       - ./config:/app/config
+    stdin_open: true
+    tty: true
     command: ["tail", "-f", "/dev/null"]
 
 volumes:

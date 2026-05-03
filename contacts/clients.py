@@ -119,6 +119,11 @@ class VibeProspectingClient:
                 if match_resp.status_code == 402:
                     logger.warning("VibeProspectingClient: credits exhausted (match)")
                     return []
+                if match_resp.status_code == 403:
+                    raise RuntimeError(
+                        "Vibe API 403 Forbidden — REST API key not authorized. "
+                        "Generate a REST key at explorium.ai and set VIBE_API_KEY in .env"
+                    )
                 match_resp.raise_for_status()
                 matches = match_resp.json().get("matched_businesses") or []
                 if not matches:
@@ -140,16 +145,20 @@ class VibeProspectingClient:
                     return []
                 fetch_resp.raise_for_status()
                 data = fetch_resp.json()
+        except RuntimeError:
+            raise
         except Exception as exc:
-            logger.warning("VibeProspectingClient.find_people failed: %s", exc)
+            logger.warning("VibeProspectingClient.find_people failed: %s", exc, exc_info=True)
             return []
 
+        logger.debug("VibeProspectingClient raw response keys: %s", list(data.keys()))
         raw_people = (
             (data.get("preview") or {}).get("preview_data")
             or data.get("prospects")
             or data.get("data")
             or []
         )
+        logger.info("VibeProspectingClient: %d raw people for %r", len(raw_people), company)
 
         prospects: list[dict] = []
         for p in raw_people:
