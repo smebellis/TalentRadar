@@ -163,16 +163,16 @@ class VibeProspectingClient:
 
         prospects: list[dict] = []
         for p in raw_people:
-            linkedin = p.get("linkedin") or ""
+            linkedin = p.get("prospect_linkedin") or ""
             if linkedin and not linkedin.startswith("http"):
                 linkedin = "https://" + linkedin
-            city = p.get("city") or ""
-            region = p.get("region_name") or ""
+            city = p.get("prospect_city") or ""
+            region = p.get("prospect_region_name") or ""
             notes = ", ".join(filter(None, [city, region]))[:100]
             prospects.append(
                 {
-                    "name": p.get("full_name") or "",
-                    "title": p.get("job_title") or "",
+                    "name": p.get("prospect_full_name") or "",
+                    "title": p.get("prospect_job_title") or "",
                     "company": company,
                     "linkedin_url": linkedin,
                     "email": None,
