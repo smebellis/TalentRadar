@@ -164,7 +164,9 @@ class JobSearchApp(App):
             ctx = await orch.run(cv_path=self._cv_path, filters=filters)
 
             if ctx.output:
-                Path("output.json").write_text(ctx.output)
+                out_dir = Path("/app/output") if Path("/app/output").exists() else Path("output")
+                out_dir.mkdir(exist_ok=True)
+                (out_dir / "output.json").write_text(ctx.output)
 
         except Exception as exc:
             self.query_one(ProgressPanel).set_error(str(exc))

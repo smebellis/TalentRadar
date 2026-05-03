@@ -21,6 +21,7 @@ services:
     volumes:
       - ${RESUME_DIR}:/data
       - ./config:/app/config
+      - ./output:/app/output
     stdin_open: true
     tty: true
     command: ["tail", "-f", "/dev/null"]

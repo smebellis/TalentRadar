@@ -5,5 +5,7 @@ __pycache__/
 htmlcov/
 .coverage
 logs/
+output/*.json
 .venv
 *.pdf
+*.log
