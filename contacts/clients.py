@@ -162,8 +162,9 @@ class VibeProspectingClient:
         logger.info("VibeProspectingClient: %d raw people for %r", len(raw_people), company)
 
         if raw_people:
-            print(f"[VIBE DEBUG] sample prospect keys: {list(raw_people[0].keys())}", flush=True)
-            print(f"[VIBE DEBUG] sample prospect: {raw_people[0]}", flush=True)
+            with open("/app/output/vibe_debug.txt", "w") as f:
+                f.write(f"keys: {list(raw_people[0].keys())}\n")
+                f.write(f"sample: {raw_people[0]}\n")
 
         prospects: list[dict] = []
         for p in raw_people:
