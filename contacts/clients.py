@@ -97,7 +97,9 @@ class VibeProspectingClient:
         enriched = data.get("people") if isinstance(data, dict) else None
         return enriched if isinstance(enriched, list) else people
 
-    def find_people(self, company: str, job_title: str, max_results: int = 20) -> list[dict]:
+    def find_people(
+        self, company: str, job_title: str, max_results: int = 20
+    ) -> list[dict]:
         if not self.base_url or not self.api_key:
             logger.warning("VibeProspectingClient: base_url or api_key not configured")
             return []
@@ -108,7 +110,6 @@ class VibeProspectingClient:
         }
         base = self.base_url.rstrip("/")
 
-        debug_lines = [f"company={company!r}\n"]
         try:
             with httpx.Client(timeout=30.0) as client:
                 # Step 1: resolve company name → business_id
@@ -117,8 +118,6 @@ class VibeProspectingClient:
                     headers=headers,
                     json={"businesses_to_match": [{"name": company}]},
                 )
-                debug_lines.append(f"match status={match_resp.status_code}\n")
-                debug_lines.append(f"match body={match_resp.text[:500]}\n")
                 if match_resp.status_code == 402:
                     logger.warning("VibeProspectingClient: credits exhausted (match)")
                     return []
@@ -130,7 +129,9 @@ class VibeProspectingClient:
                 match_resp.raise_for_status()
                 matches = match_resp.json().get("matched_businesses") or []
                 if not matches:
-                    logger.warning("VibeProspectingClient: no match for company %r", company)
+                    logger.warning(
+                        "VibeProspectingClient: no match for company %r", company
+                    )
                     return []
                 business_id = matches[0]["business_id"]
 
@@ -139,6 +140,7 @@ class VibeProspectingClient:
                     f"{base}/prospects",
                     headers=headers,
                     json={
+                        "mode": "full",
                         "filters": {"business_id": {"values": [business_id]}},
                         "page_size": max_results,
                     },
@@ -151,24 +153,21 @@ class VibeProspectingClient:
         except RuntimeError:
             raise
         except Exception as exc:
-            debug_lines.append(f"exception: {exc}\n")
-            logger.warning("VibeProspectingClient.find_people failed: %s", exc, exc_info=True)
+            logger.warning(
+                "VibeProspectingClient.find_people failed: %s", exc, exc_info=True
+            )
             return []
-        finally:
-            with open("/app/output/vibe_debug.txt", "a") as f:
-                f.writelines(debug_lines)
 
         logger.debug("VibeProspectingClient raw response keys: %s", list(data.keys()))
-        with open("/app/output/vibe_debug.txt", "a") as f:
-            f.write(f"response keys: {list(data.keys())}\n")
-            f.write(f"response: {str(data)[:2000]}\n")
         raw_people = (
             (data.get("preview") or {}).get("preview_data")
             or data.get("prospects")
             or data.get("data")
             or []
         )
-        logger.info("VibeProspectingClient: %d raw people for %r", len(raw_people), company)
+        logger.info(
+            "VibeProspectingClient: %d raw people for %r", len(raw_people), company
+        )
 
         prospects: list[dict] = []
         for p in raw_people:

@@ -1,3 +1,4 @@
+from rich.text import Text
 from textual.app import ComposeResult
 from textual.widgets import DataTable, Static
 
@@ -8,10 +9,11 @@ class JobsTable(Static):
 
     def on_mount(self) -> None:
         self.query_one("#jobs-dt", DataTable).add_columns(
-            "Role", "Company", "Score", "Source"
+            "Role", "Company", "Score", "Source", "Apply"
         )
 
     def add_job(self, job) -> None:
         dt = self.query_one("#jobs-dt", DataTable)
         score = f"{job.fit_score:.1f}" if job.fit_score is not None else "N/A"
-        dt.add_row(job.title[:30], job.company[:20], score, job.source)
+        apply = Text("Apply", style=f"link {job.apply_url}") if job.apply_url else Text("—")
+        dt.add_row(job.title[:30], job.company[:20], score, job.source, apply)
