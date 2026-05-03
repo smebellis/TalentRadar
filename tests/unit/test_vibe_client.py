@@ -35,12 +35,13 @@ def _mock_fetch_response(people):
 def test_find_people_maps_response_correctly():
     client = _make_client()
     raw_person = {
-        "prospect_full_name": "Jane Smith",
-        "prospect_job_title": "Engineering Manager",
-        "prospect_linkedin": "linkedin.com/in/janesmith",
-        "prospect_company_name": "Acme Corp",
-        "prospect_city": "denver",
-        "prospect_region_name": "colorado",
+        "full_name": "Jane Smith",
+        "job_title": "Engineering Manager",
+        "linkedin": "linkedin.com/in/janesmith",
+        "company_name": "Acme Corp",
+        "city": "denver",
+        "region_name": "colorado",
+        "linkedin_url_array": None,
     }
     match_resp = _mock_match_response("biz-1")
     fetch_resp = _mock_fetch_response([raw_person])
