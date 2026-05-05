@@ -36,7 +36,7 @@ def _render_jobs(jobs: list[dict]) -> None:
     st.dataframe(
         rows,
         column_config={"Apply": st.column_config.LinkColumn("Apply")},
-        use_container_width=True,
+        width="stretch",
     )
 
 
@@ -63,10 +63,11 @@ def _render_messages(contacts: list[dict]) -> None:
         if msg:
             st.markdown(f"**{c.get('name', '')}**")
             st.text_area(
-                label="",
+                label=c.get("name", "Message"),
                 value=msg,
                 height=100,
                 disabled=True,
+                label_visibility="collapsed",
                 key=f"msg_{i}_{c.get('name', '')}",
             )
 
