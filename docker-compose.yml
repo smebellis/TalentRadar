@@ -29,6 +29,8 @@ services:
   web:
     build: .
     env_file: .env
+    environment:
+      - PYTHONPATH=/app
     ports:
       - "8501:8501"
     depends_on:
