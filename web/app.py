@@ -75,6 +75,9 @@ def main() -> None:
     )
 
     uploaded_file = st.file_uploader("Upload your resume (PDF)", type=["pdf"])
+    if uploaded_file is not None:
+        st.session_state["resume_bytes"] = uploaded_file.getbuffer().tobytes()
+
     location = st.text_input("Where are you looking?", value="Denver, CO")
     keywords_raw = st.text_input(
         "What kind of jobs? (comma-separated)",
@@ -82,11 +85,12 @@ def main() -> None:
         placeholder="e.g. Python, Data Engineering",
     )
 
-    if st.button("Find My Jobs", disabled=uploaded_file is None):
+    has_resume = "resume_bytes" in st.session_state
+    if st.button("Find My Jobs", disabled=not has_resume):
         keywords = [k.strip() for k in keywords_raw.split(",") if k.strip()]
 
         with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:
-            tmp.write(uploaded_file.getbuffer())
+            tmp.write(st.session_state["resume_bytes"])
             cv_path = tmp.name
 
         try:
