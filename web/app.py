@@ -33,7 +33,11 @@ def _render_jobs(jobs: list[dict]) -> None:
         {"Title": j.get("role", ""), "Company": j.get("company", ""), "Score": j.get("score", ""), "Apply": j.get("apply", "")}
         for j in jobs
     ]
-    st.dataframe(rows, use_container_width=True)
+    st.dataframe(
+        rows,
+        column_config={"Apply": st.column_config.LinkColumn("Apply")},
+        use_container_width=True,
+    )
 
 
 def _render_contacts(contacts: list[dict]) -> None:

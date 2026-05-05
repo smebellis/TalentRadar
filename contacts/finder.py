@@ -30,31 +30,26 @@ CATEGORY_TITLE_SIGNALS = {
     "recruiter": ["recruiter", "talent acquisition", "talent partner", "sourcer"],
     "hiring_manager": [
         "engineering manager",
+        "software manager",
+        "data manager",
         "director of engineering",
+        "director of software",
+        "director of data",
+        "director of technology",
+        "director, engineering",
+        "director, data",
         "vp of engineering",
+        "vp of technology",
+        "vp, engineering",
         "head of engineering",
+        "head of data",
+        "head of technology",
         "team lead",
         "tech lead",
+        "technical lead",
+        "engineering lead",
     ],
 }
-
-VETERAN_SIGNALS = [
-    "veteran",
-    "army",
-    "navy",
-    "marines",
-    "air force",
-    "coast guard",
-    "space force",
-    "military",
-    "sergeant",
-    "captain",
-    "lieutenant",
-    "corporal",
-    "specialist",
-    "mos",
-    "afsc",
-]
 
 
 def _is_executive(title: str) -> bool:
@@ -69,10 +64,6 @@ def _infer_category(title: str) -> str:
             return category
     return "peer"
 
-
-def _is_veteran_profile(title: str, notes: str = "") -> bool:
-    combined = (title + " " + notes).lower()
-    return any(signal in combined for signal in VETERAN_SIGNALS)
 
 
 class ContactFinder:
@@ -96,11 +87,7 @@ class ContactFinder:
             if _is_executive(title):
                 continue
 
-            is_vet = _is_veteran_profile(title)
-            if is_vet:
-                category = "veteran"
-            else:
-                category = _infer_category(title)
+            category = _infer_category(title)
 
             if category_counts.get(category, 0) >= self.max_per_category:
                 continue
@@ -114,7 +101,7 @@ class ContactFinder:
                     linkedin_url=person["linkedin_url"],
                     email=person.get("email"),
                     relevance_score=7.5,
-                    is_veteran=is_vet,
+                    is_veteran=False,
                     notes=person.get("notes", "")[:100],
                 )
             )

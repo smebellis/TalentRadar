@@ -110,20 +110,20 @@ def test_contact_finder_does_not_skip_non_executives():
     assert len(result) == 3
 
 
-def test_contact_finder_categorizes_veteran_by_title():
+def test_contact_finder_veteran_title_falls_back_to_peer():
     people = [_make_person("Dave", "Army Veteran turned Data Engineer")]
     finder, _, _ = _make_finder(people)
     result = finder.find(_make_job())
     assert len(result) == 1
-    assert result[0].category == "veteran"
-    assert result[0].is_veteran is True
+    assert result[0].category == "peer"
+    assert result[0].is_veteran is False
 
 
-def test_contact_finder_veteran_takes_priority_over_other_categories():
+def test_contact_finder_veteran_recruiter_categorized_as_recruiter():
     people = [_make_person("Eve", "Military Veteran Recruiter")]
     finder, _, _ = _make_finder(people)
     result = finder.find(_make_job())
-    assert result[0].category == "veteran"
+    assert result[0].category == "recruiter"
 
 
 def test_contact_finder_respects_max_per_category():
