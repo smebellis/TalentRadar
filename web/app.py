@@ -91,6 +91,10 @@ def main() -> None:
 
     has_resume = "resume_bytes" in st.session_state
     if st.button("Find My Jobs", disabled=not has_resume):
+        if "resume_bytes" not in st.session_state:
+            st.warning("Please upload your resume again.")
+            st.stop()
+
         keywords = [k.strip() for k in keywords_raw.split(",") if k.strip()]
 
         with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp:

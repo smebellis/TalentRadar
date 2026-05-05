@@ -32,10 +32,18 @@ Click **Code → Download ZIP** on GitHub. Extract the folder anywhere.
 Open a terminal, navigate to the extracted folder, and run:
 
 ```bash
-docker compose up --build -d
+docker compose up --build
 ```
 
-This takes a few minutes the first time. You only need to do it once.
+This takes a few minutes the first time. Leave this terminal window open — it keeps the app running. When you see the banner below, the app is ready:
+
+```
+============================================
+  Job Search Agent is ready!
+  Open your browser and go to:
+  http://localhost:8501
+============================================
+```
 
 ### 3. Open the browser
 
