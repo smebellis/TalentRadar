@@ -40,7 +40,7 @@ services:
       - ./web:/app/web
       - ./config:/app/config
       - ./output:/app/output
-    command: ["streamlit", "run", "web/app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    command: ["sh", "web/start.sh"]
 
 volumes:
   pgdata:

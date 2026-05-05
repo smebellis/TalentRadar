@@ -1,5 +1,6 @@
 import argparse
 import asyncio
+from pathlib import Path
 
 from hydra import compose, initialize
 
@@ -84,7 +85,9 @@ async def run_full(cfg, cv_path: str, keywords: list[str]):
     else:
         logger.info("Pipeline complete. State: %s", ctx.state)
         if ctx.output:
-            print(ctx.output)
+            out_dir = Path("/app/output") if Path("/app/output").exists() else Path("output")
+            out_dir.mkdir(exist_ok=True)
+            (out_dir / "output.json").write_text(ctx.output)
 
 
 def main():
