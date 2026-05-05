@@ -169,6 +169,13 @@ class VibeProspectingClient:
             "VibeProspectingClient: %d raw people for %r", len(raw_people), company
         )
 
+        if raw_people:
+            import json as _json
+            out_dir = "/app/output" if __import__("os").path.exists("/app/output") else "output"
+            with open(f"{out_dir}/vibe_full_sample.txt", "w") as f:
+                f.write(f"keys: {list(raw_people[0].keys())}\n\n")
+                f.write(_json.dumps(raw_people[0], indent=2, default=str))
+
         prospects: list[dict] = []
         for p in raw_people:
             name = p.get("full_name") or ""

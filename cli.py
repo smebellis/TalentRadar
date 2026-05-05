@@ -1,5 +1,6 @@
 import argparse
 import asyncio
+from pathlib import Path
 
 from hydra import compose, initialize
 
@@ -84,7 +85,9 @@ async def run_full(cfg, cv_path: str, keywords: list[str]):
     else:
         logger.info("Pipeline complete. State: %s", ctx.state)
         if ctx.output:
-            print(ctx.output)
+            out_dir = Path("/app/output") if Path("/app/output").exists() else Path("output")
+            out_dir.mkdir(exist_ok=True)
+            (out_dir / "output.json").write_text(ctx.output)
 
 
 def main():
@@ -94,14 +97,18 @@ def main():
     )
     parser.add_argument("--cv", required=True, help="Path to resume PDF")
     parser.add_argument("--keywords", nargs="*", default=[], help="Search keywords")
+    parser.add_argument("--no-ui", action="store_true", help="Run without TUI")
     args = parser.parse_args()
 
     with initialize(config_path="config", version_base=None):
         cfg = compose(config_name="config")
 
     if args.mode == "full":
-        app = JobSearchApp(cfg=cfg, cv_path=args.cv, keywords=args.keywords)
-        app.run()
+        if args.no_ui:
+            asyncio.run(run_full(cfg, cv_path=args.cv, keywords=args.keywords))
+        else:
+            app = JobSearchApp(cfg=cfg, cv_path=args.cv, keywords=args.keywords)
+            app.run()
     else:
         logger.info(f"Mode '{args.mode}' not yet implemented — use 'full'")
 

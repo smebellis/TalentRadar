@@ -26,5 +26,21 @@ services:
     tty: true
     command: ["tail", "-f", "/dev/null"]
 
+  web:
+    build: .
+    env_file: .env
+    environment:
+      - PYTHONPATH=/app
+    ports:
+      - "8501:8501"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./web:/app/web
+      - ./config:/app/config
+      - ./output:/app/output
+    command: ["sh", "web/start.sh"]
+
 volumes:
   pgdata:

@@ -15,6 +15,49 @@ A modular Python pipeline that automates job hunting. It searches Google and Lin
 
 ---
 
+## Quickstart (Web UI — easiest)
+
+No terminal knowledge required after the one-time setup.
+
+### Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+### 1. Download the repo
+
+Click **Code → Download ZIP** on GitHub. Extract the folder anywhere.
+
+### 2. Start the app (one time)
+
+Open a terminal, navigate to the extracted folder, and run:
+
+```bash
+docker compose up --build -d
+```
+
+This takes a few minutes the first time. You only need to do it once.
+
+### 3. Open the browser
+
+Go to **http://localhost:8501**
+
+### 4. Run your search
+
+1. Upload your resume PDF
+2. Enter your city (e.g. `Denver, CO`)
+3. Enter job types (e.g. `Python, Data Engineering`)
+4. Click **Find My Jobs**
+
+Results appear in 2–3 minutes.
+
+### Stop
+
+```bash
+docker compose down
+```
+
+---
+
 ## Quickstart (Docker — recommended)
 
 Docker is the easiest way to run the pipeline. No local Python or PostgreSQL install required.

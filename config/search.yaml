@@ -1,7 +1,7 @@
 search:
-  location: "Denver, CO"
+  job_type: full-time
   keywords: []
-  remote: true
+  location: Denver, CO
   onsite: true
-  job_type: "full-time"
+  remote: true
   time_window_hours: 168
