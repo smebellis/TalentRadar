@@ -26,5 +26,18 @@ services:
     tty: true
     command: ["tail", "-f", "/dev/null"]
 
+  web:
+    build: .
+    env_file: .env
+    ports:
+      - "8501:8501"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./config:/app/config
+      - ./output:/app/output
+    command: ["streamlit", "run", "web/app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+
 volumes:
   pgdata:
