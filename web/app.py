@@ -18,7 +18,10 @@ def _run_pipeline(cv_path: str, location: str, keywords: list[str]) -> int:
     cmd = [sys.executable, "cli.py", "full", "--cv", cv_path, "--no-ui"]
     if keywords:
         cmd += ["--keywords"] + keywords
-    result = subprocess.run(cmd, cwd=APP_ROOT)
+    result = subprocess.run(cmd, cwd=APP_ROOT, capture_output=True)
+    if result.returncode != 0:
+        import sys as _sys
+        print(result.stderr.decode(errors="replace"), file=_sys.stderr)
     return result.returncode
 
 
@@ -38,7 +41,7 @@ def _render_contacts(contacts: list[dict]) -> None:
         st.info("No contacts found.")
         return
     for c in contacts:
-        linkedin = c.get("linkedin_url", "")
+        linkedin = c.get("linkedin_url", "").strip()
         link = f"[Profile]({linkedin})" if linkedin else "—"
         st.markdown(
             f"**{c.get('name', '')}** · {c.get('title', '')} · {c.get('category', '')} "
@@ -51,7 +54,7 @@ def _render_messages(contacts: list[dict]) -> None:
     if not has_messages:
         st.info("No outreach messages generated.")
         return
-    for c in contacts:
+    for i, c in enumerate(contacts):
         msg = c.get("message", "")
         if msg:
             st.markdown(f"**{c.get('name', '')}**")
@@ -60,7 +63,7 @@ def _render_messages(contacts: list[dict]) -> None:
                 value=msg,
                 height=100,
                 disabled=True,
-                key=f"msg_{c.get('name', '')}_{c.get('linkedin_url', '')}",
+                key=f"msg_{i}_{c.get('name', '')}",
             )
 
 
@@ -86,8 +89,11 @@ def main() -> None:
             tmp.write(uploaded_file.getbuffer())
             cv_path = tmp.name
 
-        with st.spinner("Searching for jobs… this takes 2–3 minutes"):
-            returncode = _run_pipeline(cv_path, location, keywords)
+        try:
+            with st.spinner("Searching for jobs… this takes 2–3 minutes"):
+                returncode = _run_pipeline(cv_path, location, keywords)
+        finally:
+            Path(cv_path).unlink(missing_ok=True)
 
         if returncode != 0:
             st.error("Something went wrong. Check that your API keys are valid and try again.")
