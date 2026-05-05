@@ -94,14 +94,18 @@ def main():
     )
     parser.add_argument("--cv", required=True, help="Path to resume PDF")
     parser.add_argument("--keywords", nargs="*", default=[], help="Search keywords")
+    parser.add_argument("--no-ui", action="store_true", help="Run without TUI")
     args = parser.parse_args()
 
     with initialize(config_path="config", version_base=None):
         cfg = compose(config_name="config")
 
     if args.mode == "full":
-        app = JobSearchApp(cfg=cfg, cv_path=args.cv, keywords=args.keywords)
-        app.run()
+        if args.no_ui:
+            asyncio.run(run_full(cfg, cv_path=args.cv, keywords=args.keywords))
+        else:
+            app = JobSearchApp(cfg=cfg, cv_path=args.cv, keywords=args.keywords)
+            app.run()
     else:
         logger.info(f"Mode '{args.mode}' not yet implemented — use 'full'")
 
