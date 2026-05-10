@@ -8,7 +8,8 @@ from search.filters import SearchFilters
 
 
 def _parse_posted_at(value) -> datetime:
-    """Return a timezone-aware datetime from whatever LinkedIn/Apify gives us.
+    """
+    Return a timezone-aware datetime from whatever LinkedIn/Apify gives us.
 
     Handles:
     - ISO strings:          "2026-04-30T12:00:00Z", "2026-04-30"
@@ -60,8 +61,13 @@ def _parse_posted_at(value) -> datetime:
 
 
 class LinkedInJobSearcher:
-    def __init__(self, api_token: str) -> None:
-        self.apify_client = ApifyClient(api_token)
+    def __init__(
+        self,
+        client: ApifyClient,
+        actor_id: str = "harvestapi/linkedin-company-employees",
+    ) -> None:
+        self.apify_client = client
+        self.actor_id = actor_id
 
     def search(self, filters: SearchFilters) -> list:
         keywords = "%20".join(filters.keywords)
@@ -70,7 +76,7 @@ class LinkedInJobSearcher:
             f"https://www.linkedin.com/jobs/search/"
             f"?keywords={keywords}&location={location}"
         )
-        actor_client = self.apify_client.actor("curious_coder/linkedin-jobs-scraper")
+        actor_client = self.apify_client.actor(self.actor_id)
         run = actor_client.call(run_input={"urls": [search_url], "count": 50})
         dataset_id = run["defaultDatasetId"]
         dataset = self.apify_client.dataset(dataset_id)
