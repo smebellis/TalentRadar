@@ -208,4 +208,18 @@ Updated after every passing test and every completed module. Struggled concepts 
 | Unused imports (`os`, `OmegaConf`) | 🟢 Solid | Caught both when asked, no hints needed |
 | Moving import from function body to module level | 🟢 Solid | Understood and fixed without prompting after being asked why it was inside the function |
 
+## 2026-05-10 — Module: LinkedInJobSearcher Refactor + Veteran Detection (Tech Debt)
+
+| Concept | Status | Notes |
+|---|---|---|
+| `assert_called_with` is standalone, not wrapped in `assert x ==` | 🔴 Struggled | Wrote `assert results == mock_client.actor.assert_called_with(...)` — needed two corrections to separate the assertion |
+| Why `MockApify.return_value` disappears with DI | 🟢 Solid | Correctly explained that passing the instance directly removes the `.return_value` layer |
+| `patch` vs injected `MagicMock` in tests | 🟡 Needed a nudge | Understood after connecting that `patch` gives the class, injection gives the instance |
+| `and` vs `+` for string concatenation | 🔴 Struggled | Used `person.get("title") and person.get("headline")` — needed direct correction that `and` short-circuits on falsy strings |
+| Tuple vs string in combined expression | 🔴 Struggled | Built combined as a tuple with commas instead of joining with `+`; caught after trying to call `.lower()` on it |
+| `experience` is a list, not a single dict | 🟡 Needed a nudge | Called `.get("position")` directly on the list; redirected to iterating with a generator expression |
+| `" ".join(... for x in list)` generator pattern | 🟡 Needed a nudge | Needed the pattern shown before applying it; used it correctly once shown |
+| Missing closing `)` on multi-line expression | 🔴 Recurring | Left `" ".join(` unclosed across multiple attempts; watch for unbalanced parens on every review |
+| Constructor parameter default values | 🟢 Solid | Set `actor_id` default correctly on first attempt |
+
 <!-- Add new entries below as we progress through the build -->

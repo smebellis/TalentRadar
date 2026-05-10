@@ -2,10 +2,10 @@ import argparse
 import asyncio
 from pathlib import Path
 
+from apify_client import ApifyClient
 from hydra import compose, initialize
 
 from contacts.clients import ApifyContactClient, VibeProspectingClient
-from ui.tui import JobSearchApp
 from contacts.finder import ContactFinder
 from cv.loader import CVLoader
 from cv.parser import CVParser
@@ -23,6 +23,7 @@ from search.filters import SearchFilters
 from search.google import GoogleJobSearcher
 from search.linkedin import LinkedInJobSearcher
 from ui.renderer import UIRenderer
+from ui.tui import JobSearchApp
 from utils.logger import configure_logging, get_logger
 
 logger = get_logger(__name__)
@@ -43,12 +44,14 @@ async def run_full(cfg, cv_path: str, keywords: list[str]):
     await ensure_schema(pool)
     llm = ClaudeClient(api_key=cfg.anthropic_api_key)
     apify_contacts = ApifyContactClient(api_token=cfg.apify_api_token)
-    vibe_client = VibeProspectingClient(api_key=cfg.vibe_api_key, base_url=cfg.vibe_api_base_url)
+    vibe_client = VibeProspectingClient(
+        api_key=cfg.vibe_api_key, base_url=cfg.vibe_api_base_url
+    )
     orch = Orchestrator(
         cv_loader=CVLoader(),
         cv_parser=CVParser(llm=llm),
         google_searcher=GoogleJobSearcher(llm=llm),
-        linkedin_searcher=LinkedInJobSearcher(api_token=cfg.apify_api_token),
+        linkedin_searcher=LinkedInJobSearcher(ApifyClient(cfg.apify_api_token)),
         combiner=combine_jobs,
         job_scorer=JobScorer(llm=llm),
         contact_finder=ContactFinder(
@@ -85,7 +88,9 @@ async def run_full(cfg, cv_path: str, keywords: list[str]):
     else:
         logger.info("Pipeline complete. State: %s", ctx.state)
         if ctx.output:
-            out_dir = Path("/app/output") if Path("/app/output").exists() else Path("output")
+            out_dir = (
+                Path("/app/output") if Path("/app/output").exists() else Path("output")
+            )
             out_dir.mkdir(exist_ok=True)
             (out_dir / "output.json").write_text(ctx.output)
 

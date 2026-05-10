@@ -2999,3 +2999,77 @@ find . -name "*.py" | grep -v __pycache__ | sort
 ```bash
 git tag v0.1.0-foundation
 ```
+
+---
+
+## Task 22: Company-Targeted Search
+
+**Goal:** Add an optional `--company` flag so the pipeline finds jobs at a specific company and discovers contacts there.
+
+**Files to modify:** `search/filters.py`, `search/google.py`, `search/linkedin.py`, `cli.py`, `web/app.py`
+**Tests to write/update:** `tests/unit/test_google_search.py`, `tests/unit/test_linkedin_search.py`, `tests/unit/test_cli_no_ui.py`
+
+---
+
+- [ ] **Step 1: Add `company` field to `SearchFilters`**
+
+In `search/filters.py`, add:
+```python
+company: str | None = None
+```
+
+- [ ] **Step 2: Write failing test — GoogleJobSearcher includes company in payload**
+
+In `tests/unit/test_google_search.py`, add:
+```python
+def test_google_searcher_includes_company_in_payload():
+    mock_llm = MagicMock()
+    mock_llm.complete.return_value = json.dumps([])
+    searcher = GoogleJobSearcher(llm=mock_llm)
+    searcher.search(SearchFilters(keywords=["Engineer"], company="Acme Corp"))
+    call_kwargs = mock_llm.complete.call_args
+    assert "Acme Corp" in call_kwargs.kwargs["user"]
+```
+
+- [ ] **Step 3: Update `GoogleJobSearcher` to pass company to LLM**
+
+In `search/google.py`, include company in payload and update system prompt to restrict results when company is set.
+
+- [ ] **Step 4: Write failing test — LinkedInJobSearcher appends company to search URL**
+
+In `tests/unit/test_linkedin_search.py`, add:
+```python
+def test_linkedin_searcher_appends_company_to_url():
+    mock_client = MagicMock()
+    mock_client.actor.return_value.call.return_value = {"defaultDatasetId": "ds1"}
+    mock_client.dataset.return_value.iterate_items.return_value = iter([])
+    searcher = LinkedInJobSearcher(mock_client)
+    searcher.search(SearchFilters(keywords=["Engineer"], company="Acme Corp"))
+    call_kwargs = mock_client.actor.return_value.call.call_args
+    run_input = call_kwargs.kwargs["run_input"]
+    assert "Acme" in run_input["urls"][0]
+```
+
+- [ ] **Step 5: Update `LinkedInJobSearcher` to append company to search URL**
+
+In `search/linkedin.py`, when `filters.company` is set, append it to the keywords in the URL.
+
+- [ ] **Step 6: Write failing test — CLI accepts `--company` flag**
+
+In `tests/unit/test_cli_no_ui.py`, add a test that passes `--company "Acme"` and verifies it does not error.
+
+- [ ] **Step 7: Add `--company` to CLI and pass to `SearchFilters`**
+
+In `cli.py`:
+- Add `parser.add_argument("--company", default=None)`
+- Pass `company=args.company` into `SearchFilters` in `run_full()`
+
+- [ ] **Step 8: Add company input to Streamlit web UI**
+
+In `web/app.py`, add a text input for company and append `--company <name>` to the subprocess command when filled.
+
+- [ ] **Step 9: Run full test suite**
+
+```bash
+pyenv exec pytest tests/unit/ -v
+```
