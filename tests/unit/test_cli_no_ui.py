@@ -21,6 +21,26 @@ def test_no_ui_flag_runs_headless(monkeypatch):
 
     mock_async_run.assert_called_once()
     mock_app.assert_not_called()
+    
+def test_no_ui_flag_runs_headless_with_company(monkeypatch):
+    monkeypatch.setattr(
+        sys, "argv", ["cli.py", "full", "--cv", "/tmp/resume.pdf", "--no-ui",  "--company", "acme"]
+    )
+
+    mock_ctx = MagicMock()
+    mock_ctx.__enter__ = MagicMock(return_value=None)
+    mock_ctx.__exit__ = MagicMock(return_value=False)
+
+    with (
+        patch("cli.initialize", return_value=mock_ctx),
+        patch("cli.compose", return_value=MagicMock()),
+        patch("cli.asyncio.run") as mock_async_run,
+        patch("cli.JobSearchApp") as mock_app,
+    ):
+        main()
+
+    mock_async_run.assert_called_once()
+    mock_app.assert_not_called()
 
 
 def test_without_no_ui_flag_launches_tui(monkeypatch):

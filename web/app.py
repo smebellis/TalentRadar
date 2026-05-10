@@ -1,8 +1,8 @@
 import json
+import subprocess
 import sys
 import tempfile
 from pathlib import Path
-import subprocess
 
 import streamlit as st
 
@@ -13,14 +13,19 @@ OUTPUT_PATH = Path(__file__).parent.parent / "output" / "output.json"
 APP_ROOT = Path(__file__).parent.parent
 
 
-def _run_pipeline(cv_path: str, location: str, keywords: list[str]) -> int:
+def _run_pipeline(
+    cv_path: str, location: str, keywords: list[str], company: str,
+) -> int:
     update_location(location)
     cmd = [sys.executable, "cli.py", "full", "--cv", cv_path, "--no-ui"]
     if keywords:
         cmd += ["--keywords"] + keywords
+    if company:
+        cmd += ["--company"] + company
     result = subprocess.run(cmd, cwd=APP_ROOT, capture_output=True)
     if result.returncode != 0:
         import sys as _sys
+
         print(result.stderr.decode(errors="replace"), file=_sys.stderr)
     return result.returncode
 
@@ -30,7 +35,12 @@ def _render_jobs(jobs: list[dict]) -> None:
         st.info("No jobs found.")
         return
     rows = [
-        {"Title": j.get("role", ""), "Company": j.get("company", ""), "Score": j.get("score", ""), "Apply": j.get("apply", "")}
+        {
+            "Title": j.get("role", ""),
+            "Company": j.get("company", ""),
+            "Score": j.get("score", ""),
+            "Apply": j.get("apply", ""),
+        }
         for j in jobs
     ]
     st.dataframe(
@@ -109,17 +119,23 @@ def main() -> None:
             Path(cv_path).unlink(missing_ok=True)
 
         if returncode != 0:
-            st.error("Something went wrong. Check that your API keys are valid and try again.")
+            st.error(
+                "Something went wrong. Check that your API keys are valid and try again."
+            )
             return
 
         if not OUTPUT_PATH.exists():
-            st.warning("No results found. Try different keywords or a broader location.")
+            st.warning(
+                "No results found. Try different keywords or a broader location."
+            )
             return
 
         try:
             data = json.loads(OUTPUT_PATH.read_text())
         except (json.JSONDecodeError, OSError):
-            st.warning("No results found. Try different keywords or a broader location.")
+            st.warning(
+                "No results found. Try different keywords or a broader location."
+            )
             return
 
         jobs = parse_jobs(data)

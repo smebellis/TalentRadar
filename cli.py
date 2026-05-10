@@ -103,6 +103,7 @@ def main():
     parser.add_argument("--cv", required=True, help="Path to resume PDF")
     parser.add_argument("--keywords", nargs="*", default=[], help="Search keywords")
     parser.add_argument("--no-ui", action="store_true", help="Run without TUI")
+    parser.add_argument("--company", nargs="*", default=[], help="Search Company")
     args = parser.parse_args()
 
     with initialize(config_path="config", version_base=None):

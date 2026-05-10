@@ -87,3 +87,14 @@ def test_linkedin_searcher_custom_actor_id() -> None:
     results = searcher.search(SearchFilters(time_window_hours=24))
 
     mock_client.actor.assert_called_with("test-123")
+
+
+def test_linkedin_searcher_appends_company_to_url():
+    mock_client = MagicMock()
+    mock_client.actor.return_value.call.return_value = {"defaultDatasetId": "ds1"}
+    mock_client.dataset.return_value.iterate_items.return_value = iter([])
+    searcher = LinkedInJobSearcher(mock_client)
+    searcher.search(SearchFilters(keywords=["Engineer"], company="Acme Corp"))
+    call_kwargs = mock_client.actor.return_value.call.call_args
+    run_input = call_kwargs.kwargs["run_input"]
+    assert "Acme" in run_input["urls"][0]

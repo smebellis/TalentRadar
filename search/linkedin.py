@@ -72,9 +72,10 @@ class LinkedInJobSearcher:
     def search(self, filters: SearchFilters) -> list:
         keywords = "%20".join(filters.keywords)
         location = filters.location.replace(", ", "%2C%20").replace(" ", "%20")
+
         search_url = (
             f"https://www.linkedin.com/jobs/search/"
-            f"?keywords={keywords}&location={location}"
+            f"?keywords={keywords}&location={location}&company={filters.company}"
         )
         actor_client = self.apify_client.actor(self.actor_id)
         run = actor_client.call(run_input={"urls": [search_url], "count": 50})

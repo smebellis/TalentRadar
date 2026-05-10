@@ -8,3 +8,4 @@ class SearchFilters(BaseModel):
     remote: bool = True
     onsite: bool = True
     job_type: str = "full_time"
+    company: str | None = None
