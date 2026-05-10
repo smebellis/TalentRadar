@@ -14,14 +14,17 @@ APP_ROOT = Path(__file__).parent.parent
 
 
 def _run_pipeline(
-    cv_path: str, location: str, keywords: list[str], company: str,
+    cv_path: str,
+    location: str,
+    keywords: list[str],
+    company: str,
 ) -> int:
     update_location(location)
     cmd = [sys.executable, "cli.py", "full", "--cv", cv_path, "--no-ui"]
     if keywords:
         cmd += ["--keywords"] + keywords
     if company:
-        cmd += ["--company"] + company
+        cmd += ["--company", company]
     result = subprocess.run(cmd, cwd=APP_ROOT, capture_output=True)
     if result.returncode != 0:
         import sys as _sys
@@ -100,6 +103,12 @@ def main() -> None:
         placeholder="e.g. Python, Data Engineering",
     )
 
+    company = st.text_input(
+        "What company are you interested in (one company at a time)",
+        value="",
+        placeholder="Netflix",
+    )
+
     has_resume = "resume_bytes" in st.session_state
     if st.button("Find My Jobs", disabled=not has_resume):
         if "resume_bytes" not in st.session_state:
@@ -114,7 +123,7 @@ def main() -> None:
 
         try:
             with st.spinner("Searching for jobs… this takes 2–3 minutes"):
-                returncode = _run_pipeline(cv_path, location, keywords)
+                returncode = _run_pipeline(cv_path, location, keywords, company)
         finally:
             Path(cv_path).unlink(missing_ok=True)
 

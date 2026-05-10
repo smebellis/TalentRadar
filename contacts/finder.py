@@ -149,7 +149,7 @@ class ContactFinder:
                     category=category,
                     linkedin_url=person["linkedin_url"],
                     email=person.get("email"),
-                    relevance_score=7.5,
+                    relevance_score=0,
                     is_veteran=_is_veteran_profile(person),
                     notes=person.get("notes", "")[:100],
                 )

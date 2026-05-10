@@ -222,4 +222,14 @@ Updated after every passing test and every completed module. Struggled concepts 
 | Missing closing `)` on multi-line expression | 🔴 Recurring | Left `" ".join(` unclosed across multiple attempts; watch for unbalanced parens on every review |
 | Constructor parameter default values | 🟢 Solid | Set `actor_id` default correctly on first attempt |
 
+## 2026-05-10 — Module: Company-Targeted Search (Task 22)
+
+| Concept | Status | Notes |
+|---|---|---|
+| `str \| None = None` is still setting a default | 🟡 Needed a nudge | Said "no default needed" — one question clarified that `None` is itself the default |
+| Pydantic optional field ordering | 🟢 Solid | Correctly identified all fields have defaults, no ordering issue |
+| URL query param append (`&company={value}`) | 🟢 Solid | Identified the pattern independently |
+| argparse `--company` wiring to `SearchFilters` | 🟢 Solid | Added arg and passed it through cleanly without hints |
+| Streamlit text input + subprocess flag passthrough | 🟢 Solid | Matched existing keyword pattern and wired to cmd list correctly |
+
 <!-- Add new entries below as we progress through the build -->

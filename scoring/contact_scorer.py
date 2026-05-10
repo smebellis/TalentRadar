@@ -14,6 +14,7 @@ class ContactScorer:
         searcher_is_veteran: bool,
     ) -> list[Contact]:
         for item in contact:
+            item.relevance_score = 5 - self.PRIORITIES[item.category]
             if searcher_is_veteran and item.is_veteran:
                 item.relevance_score += self.veteran_boost
 
