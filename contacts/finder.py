@@ -20,9 +20,22 @@ class _NoopVibeClient:
 
 
 EXECUTIVE_SIGNALS = [
-    "chief", "ceo", "cto", "cfo", "coo", "ciso", "cpo",
-    "svp", "evp", "executive vice president", "senior vice president",
-    "president", "founder", "co-founder", "partner", "managing director",
+    "chief",
+    "ceo",
+    "cto",
+    "cfo",
+    "coo",
+    "ciso",
+    "cpo",
+    "svp",
+    "evp",
+    "executive vice president",
+    "senior vice president",
+    "president",
+    "founder",
+    "co-founder",
+    "partner",
+    "managing director",
     "general manager",
 ]
 
@@ -51,6 +64,42 @@ CATEGORY_TITLE_SIGNALS = {
     ],
 }
 
+VETERAN_SIGNALS = [
+    "veteran",
+    "army",
+    "navy",
+    "marines",
+    "air force",
+    "coast guard",
+    "space force",
+    "military",
+    "sergeant",
+    "captain",
+    "lieutenant",
+    "corporal",
+    "specialist",
+    "mos",
+    "afsc",
+]
+
+
+def _is_veteran_profile(person: dict) -> bool:
+    experience_text = " ".join(
+        exp.get("position", "") + " " + exp.get("description", "")
+        for exp in person.get("experience", [])
+    )
+
+    combined = (
+        person.get("title", "")
+        + person.get("headline", "")
+        + " "
+        + person.get("about", "")
+        + " "
+        + experience_text
+    ).lower()
+
+    return any(signal in combined for signal in VETERAN_SIGNALS)
+
 
 def _is_executive(title: str) -> bool:
     title_lower = title.lower()
@@ -65,7 +114,6 @@ def _infer_category(title: str) -> str:
     return "peer"
 
 
-
 class ContactFinder:
     def __init__(self, apify_client, vibe_client, max_per_category: int) -> None:
         self.apify_client = apify_client or _NoopApifyClient()
@@ -74,10 +122,11 @@ class ContactFinder:
 
     def find(self, job: Job):
         raw_people = (
-            self.vibe_client.find_people(company=job.company, job_title=job.title)
-            or []
+            self.vibe_client.find_people(company=job.company, job_title=job.title) or []
         )
-        logger.info("ContactFinder: %d people from Vibe for %r", len(raw_people), job.company)
+        logger.info(
+            "ContactFinder: %d people from Vibe for %r", len(raw_people), job.company
+        )
         contacts: list[Contact] = []
         category_counts: dict[str, int] = {}
 
@@ -101,7 +150,7 @@ class ContactFinder:
                     linkedin_url=person["linkedin_url"],
                     email=person.get("email"),
                     relevance_score=7.5,
-                    is_veteran=False,
+                    is_veteran=_is_veteran_profile(person),
                     notes=person.get("notes", "")[:100],
                 )
             )

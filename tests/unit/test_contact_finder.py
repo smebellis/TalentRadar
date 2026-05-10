@@ -22,11 +22,15 @@ def _make_finder(vibe_people, max_per_category=8):
     mock_apify = MagicMock()
     mock_vibe = MagicMock()
     mock_vibe.find_people.return_value = vibe_people
-    return ContactFinder(
-        apify_client=mock_apify,
-        vibe_client=mock_vibe,
-        max_per_category=max_per_category,
-    ), mock_apify, mock_vibe
+    return (
+        ContactFinder(
+            apify_client=mock_apify,
+            vibe_client=mock_vibe,
+            max_per_category=max_per_category,
+        ),
+        mock_apify,
+        mock_vibe,
+    )
 
 
 def test_contact_finder_calls_vibe_find_people():
@@ -116,7 +120,7 @@ def test_contact_finder_veteran_title_falls_back_to_peer():
     result = finder.find(_make_job())
     assert len(result) == 1
     assert result[0].category == "peer"
-    assert result[0].is_veteran is False
+    assert result[0].is_veteran is True
 
 
 def test_contact_finder_veteran_recruiter_categorized_as_recruiter():
