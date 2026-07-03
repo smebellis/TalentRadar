@@ -29,7 +29,7 @@ from utils.logger import configure_logging, get_logger
 logger = get_logger(__name__)
 
 
-async def run_full(cfg, cv_path: str, keywords: list[str]):
+async def run_full(cfg, cv_path: str, keywords: list[str], company: str | None = None):
     try:
         configure_logging(level=cfg.logging.level)
     except Exception:
@@ -40,6 +40,8 @@ async def run_full(cfg, cv_path: str, keywords: list[str]):
         db=cfg.database.db,
         user=cfg.database.user,
         password=cfg.database.password,
+        min_size=int(cfg.database.min_pool_size),
+        max_size=int(cfg.database.max_pool_size),
     )
     await ensure_schema(pool)
     llm = ClaudeClient(api_key=cfg.anthropic_api_key)
@@ -79,6 +81,7 @@ async def run_full(cfg, cv_path: str, keywords: list[str]):
         onsite=cfg.search.onsite,
         job_type=cfg.search.job_type,
         time_window_hours=cfg.search.time_window_hours,
+        company=company,
     )
     ctx = await orch.run(cv_path=cv_path, filters=filters)
     await pool.close()
@@ -109,11 +112,17 @@ def main():
     with initialize(config_path="config", version_base=None):
         cfg = compose(config_name="config")
 
+    company = " ".join(args.company) if args.company else None
+
     if args.mode == "full":
         if args.no_ui:
-            asyncio.run(run_full(cfg, cv_path=args.cv, keywords=args.keywords))
+            asyncio.run(
+                run_full(cfg, cv_path=args.cv, keywords=args.keywords, company=company)
+            )
         else:
-            app = JobSearchApp(cfg=cfg, cv_path=args.cv, keywords=args.keywords)
+            app = JobSearchApp(
+                cfg=cfg, cv_path=args.cv, keywords=args.keywords, company=company
+            )
             app.run()
     else:
         logger.info(f"Mode '{args.mode}' not yet implemented — use 'full'")

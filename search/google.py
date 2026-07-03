@@ -8,10 +8,22 @@ from utils.logger import get_logger
 logger = get_logger(__name__)
 
 _SYSTEM = (
-    "You are a job search assistant. Return ONLY a JSON array of job objects. "
+    "You are a job search assistant. Use web search to find real, currently "
+    "open job postings matching the given keywords and location. Only include "
+    "jobs you actually found via search — never invent listings or URLs. "
+    "Return ONLY a JSON array of job objects. "
     "Each object must have: title, company, posted_at (ISO 8601), apply_url, raw_description. "
     "No markdown, no explanation — raw JSON only."
 )
+
+
+def _strip_code_fences(text: str) -> str:
+    text = text.strip()
+    if text.startswith("```"):
+        text = text.split("\n", 1)[1] if "\n" in text else ""
+    if text.endswith("```"):
+        text = text.rsplit("```", 1)[0]
+    return text.strip()
 
 
 class GoogleJobSearcher:
@@ -20,10 +32,10 @@ class GoogleJobSearcher:
 
     def search(self, filters: SearchFilters) -> list:
         user_payload = json.dumps({"keywords": filters.keywords, "location": filters.location})
-        raw = self.llm.complete(system=_SYSTEM, user=user_payload)
+        raw = self.llm.complete(system=_SYSTEM, user=user_payload, web_search=True)
 
         try:
-            items = json.loads(raw)
+            items = json.loads(_strip_code_fences(raw))
         except (json.JSONDecodeError, TypeError):
             logger.warning("GoogleJobSearcher: LLM returned unparseable response.")
             return []

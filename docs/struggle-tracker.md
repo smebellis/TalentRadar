@@ -8,7 +8,21 @@ Updated after every passing test and every completed module. Struggled concepts 
 
 | Item | Notes |
 |---|---|
-| `LinkedInJobSearcher` uses `api_token` internally instead of injected client | Should match `ContactFinder` DI pattern; tests need `patch` removed and `MagicMock()` passed directly |
+| ~~`LinkedInJobSearcher` uses `api_token` internally instead of injected client~~ | ✅ Resolved — client injected; stale `ui/tui.py` call site fixed 2026-07-03 |
+| `search` / `contacts-only` CLI modes not implemented | `cli.py` only runs `full`; other modes log a warning |
+| GoogleJobSearcher web search untested against live API | Web search tool enabled 2026-07-03; needs a live integration run to confirm the JSON output parses |
+
+---
+
+## 2026-07-03 — Review Session: bug sweep (fixes applied directly, not TDD)
+
+| Concept | Status | Notes |
+|---|---|---|
+| Keeping call sites in sync after a refactor | 🔴 Struggled | `cli.py` was fixed to inject `ApifyClient`, but `ui/tui.py` still used the removed `api_token=` kwarg — the default TUI path crashed with `TypeError`; TUI tests missed it because they pass `_skip_pipeline=True` |
+| Wiring a CLI flag end-to-end | 🔴 Struggled | `--company` was parsed but never reached `SearchFilters` in either path — feature was dead despite a passing test (the test only asserted `asyncio.run` was called) |
+| Choosing the right external actor + input schema | 🟡 Needed a nudge | Default actor was `harvestapi/linkedin-company-employees` (an employees scraper) fed a jobs-search URL; swapped to `harvestapi/linkedin-job-search` with its real input (`jobTitles`/`locations`/`company`) |
+| LLM output is untrusted input | 🟡 Needed a nudge | `JobScorer` did bare `json.loads(response)["score"]` — one malformed reply crashed the whole pipeline; Google searcher asked Claude for jobs *without* web search, so listings were hallucinated |
+| Hydra config namespacing | 🟡 Needed a nudge | `logging.yaml` keys sat at root, so `cfg.logging.level` always raised and was silently swallowed by a broad `except` |
 
 ---
 

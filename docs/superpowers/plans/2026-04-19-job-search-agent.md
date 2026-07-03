@@ -3011,31 +3011,22 @@ git tag v0.1.0-foundation
 
 ---
 
-- [ ] **Step 1: Add `company` field to `SearchFilters`**
+- [x] **Step 1: Add `company` field to `SearchFilters`**
 
 In `search/filters.py`, add:
 ```python
 company: str | None = None
 ```
 
-- [ ] **Step 2: Write failing test — GoogleJobSearcher includes company in payload**
+- [x] **Step 2: Write failing test — GoogleJobSearcher includes company in payload**
 
-In `tests/unit/test_google_search.py`, add:
-```python
-def test_google_searcher_includes_company_in_payload():
-    mock_llm = MagicMock()
-    mock_llm.complete.return_value = json.dumps([])
-    searcher = GoogleJobSearcher(llm=mock_llm)
-    searcher.search(SearchFilters(keywords=["Engineer"], company="Acme Corp"))
-    call_kwargs = mock_llm.complete.call_args
-    assert "Acme Corp" in call_kwargs.kwargs["user"]
-```
+*Skipped — GoogleJobSearcher is not currently used (Google search does not return job listings reliably).*
 
-- [ ] **Step 3: Update `GoogleJobSearcher` to pass company to LLM**
+- [x] **Step 3: Update `GoogleJobSearcher` to pass company to LLM**
 
-In `search/google.py`, include company in payload and update system prompt to restrict results when company is set.
+*Skipped — same reason as Step 2.*
 
-- [ ] **Step 4: Write failing test — LinkedInJobSearcher appends company to search URL**
+- [x] **Step 4: Write failing test — LinkedInJobSearcher appends company to search URL**
 
 In `tests/unit/test_linkedin_search.py`, add:
 ```python
@@ -3050,25 +3041,25 @@ def test_linkedin_searcher_appends_company_to_url():
     assert "Acme" in run_input["urls"][0]
 ```
 
-- [ ] **Step 5: Update `LinkedInJobSearcher` to append company to search URL**
+- [x] **Step 5: Update `LinkedInJobSearcher` to append company to search URL**
 
 In `search/linkedin.py`, when `filters.company` is set, append it to the keywords in the URL.
 
-- [ ] **Step 6: Write failing test — CLI accepts `--company` flag**
+- [x] **Step 6: Write failing test — CLI accepts `--company` flag**
 
 In `tests/unit/test_cli_no_ui.py`, add a test that passes `--company "Acme"` and verifies it does not error.
 
-- [ ] **Step 7: Add `--company` to CLI and pass to `SearchFilters`**
+- [x] **Step 7: Add `--company` to CLI and pass to `SearchFilters`**
 
 In `cli.py`:
 - Add `parser.add_argument("--company", default=None)`
 - Pass `company=args.company` into `SearchFilters` in `run_full()`
 
-- [ ] **Step 8: Add company input to Streamlit web UI**
+- [x] **Step 8: Add company input to Streamlit web UI**
 
 In `web/app.py`, add a text input for company and append `--company <name>` to the subprocess command when filled.
 
-- [ ] **Step 9: Run full test suite**
+- [x] **Step 9: Run full test suite**
 
 ```bash
 pyenv exec pytest tests/unit/ -v

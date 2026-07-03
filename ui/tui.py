@@ -39,11 +39,19 @@ class JobSearchApp(App):
 
     BINDINGS = [Binding("q", "quit", "Quit")]
 
-    def __init__(self, cfg, cv_path: str, keywords: list, _skip_pipeline: bool = False):
+    def __init__(
+        self,
+        cfg,
+        cv_path: str,
+        keywords: list,
+        company: str | None = None,
+        _skip_pipeline: bool = False,
+    ):
         super().__init__()
         self._cfg = cfg
         self._cv_path = cv_path
         self._keywords = keywords
+        self._company = company
         self._skip_pipeline = _skip_pipeline
 
     def compose(self) -> ComposeResult:
@@ -85,6 +93,8 @@ class JobSearchApp(App):
             self.query_one(ProgressPanel).set_error(data.get("message", "Unknown error"))
 
     async def _run_pipeline(self) -> None:
+        from apify_client import ApifyClient
+
         from contacts.clients import ApifyContactClient, VibeProspectingClient
         from contacts.finder import ContactFinder
         from cv.loader import CVLoader
@@ -131,7 +141,7 @@ class JobSearchApp(App):
                 cv_loader=CVLoader(),
                 cv_parser=CVParser(llm=llm),
                 google_searcher=GoogleJobSearcher(llm=llm),
-                linkedin_searcher=LinkedInJobSearcher(api_token=cfg.apify_api_token),
+                linkedin_searcher=LinkedInJobSearcher(ApifyClient(cfg.apify_api_token)),
                 combiner=combine_jobs,
                 job_scorer=JobScorer(llm=llm),
                 contact_finder=ContactFinder(
@@ -160,6 +170,7 @@ class JobSearchApp(App):
                 onsite=cfg.search.onsite,
                 job_type=cfg.search.job_type,
                 time_window_hours=cfg.search.time_window_hours,
+                company=self._company,
             )
             ctx = await orch.run(cv_path=self._cv_path, filters=filters)
 

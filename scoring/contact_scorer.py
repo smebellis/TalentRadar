@@ -13,8 +13,10 @@ class ContactScorer:
         contact: list[Contact],
         searcher_is_veteran: bool,
     ) -> list[Contact]:
+        lowest_priority = max(self.PRIORITIES.values())
         for item in contact:
-            item.relevance_score = 5 - self.PRIORITIES[item.category]
+            priority = self.PRIORITIES.get(item.category, lowest_priority)
+            item.relevance_score = 5 - priority
             if searcher_is_veteran and item.is_veteran:
                 item.relevance_score += self.veteran_boost
 
@@ -23,7 +25,8 @@ class ContactScorer:
         ]
 
         sorted_contact = sorted(
-            filtered_contacts, key=lambda item: self.PRIORITIES[item.category]
+            filtered_contacts,
+            key=lambda item: self.PRIORITIES.get(item.category, lowest_priority),
         )
 
         return sorted_contact

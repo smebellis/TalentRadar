@@ -64,21 +64,23 @@ class LinkedInJobSearcher:
     def __init__(
         self,
         client: ApifyClient,
-        actor_id: str = "harvestapi/linkedin-company-employees",
+        actor_id: str = "harvestapi/linkedin-job-search",
     ) -> None:
         self.apify_client = client
         self.actor_id = actor_id
 
     def search(self, filters: SearchFilters) -> list:
-        keywords = "%20".join(filters.keywords)
-        location = filters.location.replace(", ", "%2C%20").replace(" ", "%20")
+        run_input: dict = {
+            "jobTitles": filters.keywords,
+            "maxItems": 50,
+        }
+        if filters.location:
+            run_input["locations"] = [filters.location]
+        if filters.company:
+            run_input["company"] = [filters.company]
 
-        search_url = (
-            f"https://www.linkedin.com/jobs/search/"
-            f"?keywords={keywords}&location={location}&company={filters.company}"
-        )
         actor_client = self.apify_client.actor(self.actor_id)
-        run = actor_client.call(run_input={"urls": [search_url], "count": 50})
+        run = actor_client.call(run_input=run_input)
         dataset_id = run["defaultDatasetId"]
         dataset = self.apify_client.dataset(dataset_id)
         items = list(dataset.iterate_items())
@@ -86,15 +88,32 @@ class LinkedInJobSearcher:
         cutoff = datetime.now(timezone.utc) - timedelta(hours=filters.time_window_hours)
         filtered_jobs: list[Job] = []
         for item in items:
-            apply_url = item.get("applyUrl") or item.get("link") or item.get("jobUrl")
+            apply_url = (
+                item.get("applyUrl")
+                or item.get("linkedinUrl")
+                or item.get("link")
+                or item.get("jobUrl")
+            )
             if not apply_url:
                 continue
+            company = item.get("companyName")
+            if not company:
+                raw_company = item.get("company")
+                company = (
+                    raw_company.get("name")
+                    if isinstance(raw_company, dict)
+                    else raw_company
+                )
             try:
-                raw_posted = item.get("postedAt") or item.get("postedAtTimestamp")
+                raw_posted = (
+                    item.get("postedDate")
+                    or item.get("postedAt")
+                    or item.get("postedAtTimestamp")
+                )
                 posted_at = _parse_posted_at(raw_posted)
                 job = Job(
                     title=item.get("title") or "Unknown",
-                    company=item.get("companyName") or "Unknown",
+                    company=company or "Unknown",
                     posted_at=posted_at,
                     source="linkedin",
                     apply_url=apply_url,

@@ -108,8 +108,12 @@ class Orchestrator:
             print(f"[4/7] Finding contacts for {len(top_jobs)} top jobs...", flush=True)
             self._fire("finding_contacts", {})
             raw_contacts = []
+            contact_job = {}
             for job in top_jobs:
-                raw_contacts.extend(self._contact_finder.find(job))
+                found = self._contact_finder.find(job)
+                for contact in found:
+                    contact_job[contact.id] = job
+                raw_contacts.extend(found)
 
             ctx.state = PipelineState.SCORING_CONTACTS
             print(f"[5/7] Scoring {len(raw_contacts)} contacts...", flush=True)
@@ -120,18 +124,20 @@ class Orchestrator:
 
             ctx.state = PipelineState.GENERATE_MESSAGES
             print(f"[6/7] Generating messages for {len(ctx.contacts)} contacts...", flush=True)
+            fallback_job = top_jobs[0] if top_jobs else None
             ctx.messages = [
                 msg
                 for c in ctx.contacts
-                for j in top_jobs[:1]
-                if (msg := self._msg_gen.generate(c, j)) is not None
+                if (job := contact_job.get(c.id, fallback_job)) is not None
+                and (msg := self._msg_gen.generate(c, job)) is not None
             ]
             self._fire("generating_messages", {"messages": ctx.messages})
 
             for contact in ctx.contacts:
+                source_job = contact_job.get(contact.id, fallback_job)
                 await self._contact_repo.save(
                     contact,
-                    top_jobs[0].id if top_jobs else None,
+                    source_job.id if source_job else None,
                 )
 
             for message in ctx.messages:
